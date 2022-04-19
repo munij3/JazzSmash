@@ -5,8 +5,8 @@ using UnityEngine;
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager scoreManager;
-    public AudioSource goodEffect;
-    public AudioSource perfectEffect;
+    // public AudioSource goodEffect;
+    // public AudioSource perfectEffect;
     public AudioSource missEffect;
     static double combo;
     static double score;
@@ -20,25 +20,25 @@ public class ScoreManager : MonoBehaviour
         accuracy = 0;
     }
 
-    public static void Good(margin){
+    public static void Good(double margin){
         combo += 1;
         score += 10 * combo;
-        scoreManager.goodEffect.Play();
+        // scoreManager.goodEffect.Play();
         totalMargin += margin;
     }
-    public static void Perfect(margin){
+    public static void Perfect(double margin){
         combo += 1.5;
         score += 20 * combo;
-        scoreManager.perfectEffect.Play();
+        // scoreManager.perfectEffect.Play();
         totalMargin += margin;
     }
-    public static void Miss(margin){
+    public static void Miss(){
         combo = 0;
-        scoreManager.missEffect.Play(); 
+        // scoreManager.missEffect.Play(); 
     }
 
     public static void Accuracy(){
-        accuracy = // something
+        // accuracy =
     }
     
     private void Update(){

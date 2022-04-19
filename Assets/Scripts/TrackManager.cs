@@ -31,13 +31,13 @@ public class TrackManager : MonoBehaviour
 
     void Start(){
         trackManager = this;
-        // Specify midi file location 
-        midiFile = MidiFiles.Read(Application.MidiFile + "/" + fileLocation);
+        // Specify midi file location via the StreamingAssets folder
+        midiFile = MidiFile.Read(Application.dataPath + "/Resources/Data/StreamingAssets" + "/" + fileLocation);
         // Use midi data after it has been loaded
-        GetDataFromMidi();
+        GetMidiNotes();
     }
 
-    public void GetDataFromMidi(){
+    public void GetMidiNotes(){
         // Obtain notes and a count of notes from the midi file
         var notes = midiFile.GetNotes();
         var array = new Melanchall.DryWetMidi.Interaction.Note[notes.Count];
@@ -57,6 +57,5 @@ public class TrackManager : MonoBehaviour
         // Divides source samples by the frequency of the song to obtain the time
         return (double)trackManager.audioSource.timeSamples / trackManager.audioSource.clip.frequency;
     }
-
     void Update(){}
 }
