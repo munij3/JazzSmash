@@ -34,7 +34,7 @@ public class ScoreManager : MonoBehaviour
     }
     public static void Miss(){
         combo = 0;
-        // scoreManager.missEffect.Play(); 
+        scoreManager.missEffect.Play(); 
     }
 
     public static void Accuracy(){
