@@ -8,41 +8,50 @@ public class ScoreManager : MonoBehaviour
     // public AudioSource goodEffect;
     // public AudioSource perfectEffect;
     public AudioSource missEffect;
+    // public TMPro.TextMeshPro scoreText;
+    // public TMPro.TextMeshPro comboText;
     static double combo;
     static double score;
     static double accuracy;
     static double totalMargin;
 
-    void Start(){
+    void Start()
+    {
         scoreManager = this;
         combo = 0;
         score = 0;
         accuracy = 0;
     }
 
-    public static void Good(double margin){
+    public static void Good(double margin)
+    {
         combo += 1;
         score += 10 * combo;
         // scoreManager.goodEffect.Play();
         totalMargin += margin;
     }
-    public static void Perfect(double margin){
+    public static void Perfect(double margin)
+    {
         combo += 1.5;
         score += 20 * combo;
         // scoreManager.perfectEffect.Play();
         totalMargin += margin;
     }
-    public static void Miss(){
+    public static void Miss()
+    {
         combo = 0;
         scoreManager.missEffect.Play(); 
     }
 
-    public static void Accuracy(){
+    public static void Accuracy()
+    {
         // accuracy =
     }
     
-    private void Update(){
-        // Set score updating text or
+    private void Update()
+    {
+        // Convert TextMesh to string
+        // scoreText.text = score.ToString();
         // scoreText.text = combo.ToString();
     }
 }

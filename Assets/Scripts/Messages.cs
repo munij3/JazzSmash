@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Messages : MonoBehaviour
 {
-    public float duration = 1;
+    public float duration;
 
     void Start()
     {
@@ -13,5 +13,6 @@ public class Messages : MonoBehaviour
 
     void Update()
     {
+        GetComponent<SpriteRenderer>().enabled = true;
     }
 }

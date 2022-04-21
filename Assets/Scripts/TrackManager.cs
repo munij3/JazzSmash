@@ -35,12 +35,7 @@ public class TrackManager : MonoBehaviour
     {
         trackManager = this;
         midiFile = MidiFile.Read(Application.streamingAssetsPath  + "/" + midiName);
-        GetMidiNotes(); // Use the midi file data after it has been loaded
-    }
-
-    public void GetMidiNotes()
-    {
-        /* Obtain notes and a count of notes from the midi file, then copy them to an array and set timestamps for each column */
+         /* Obtain notes and a count of notes from the midi file, then copy them to an array and set timestamps for each column */
         var notes = midiFile.GetNotes();
         var array = new Melanchall.DryWetMidi.Interaction.Note[notes.Count];
         notes.CopyTo(array, 0);
@@ -51,6 +46,7 @@ public class TrackManager : MonoBehaviour
         // Invoke StartSong or audio source after a delay
         Invoke(nameof(StartSong), songDelayInSeconds);
     }
+
     public void StartSong()
     {
         audioSource.Play();

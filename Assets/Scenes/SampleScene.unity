@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 108134557}
   - component: {fileID: 108134556}
   m_Layer: 0
-  m_Name: Margin_good
+  m_Name: Attack position
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -201,7 +201,7 @@ Transform:
   m_GameObject: {fileID: 108134555}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 5, z: 0}
-  m_LocalScale: {x: 10, y: 0.21, z: 1}
+  m_LocalScale: {x: 10, y: 0.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -365,7 +365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   noteRestriction: 4
-  input: 115
+  input: 97
   enemyPrefab: {fileID: 2455607993351871582, guid: 9743c3184690041cabf8a81f3110d494, type: 3}
   goodPrefab: {fileID: 5592976090718956367, guid: bf44e0f1754a443779b30d59b13facb4, type: 3}
   perfectPrefab: {fileID: 4090848258105182254, guid: 5dc6097a403644fb495fb03d8a393bd0, type: 3}
@@ -388,90 +388,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &505553814
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 505553816}
-  - component: {fileID: 505553815}
-  m_Layer: 0
-  m_Name: Margin_perfect
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!212 &505553815
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 505553814}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 1
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0, g: 0.7739825, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
---- !u!4 &505553816
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 505553814}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: 0}
-  m_LocalScale: {x: 10, y: 0.07, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
@@ -761,7 +677,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   noteRestriction: 7
-  input: 102
+  input: 100
   enemyPrefab: {fileID: 1217786819771855565, guid: 8a03dffd168ef408cbcfa0601f3c5fa6, type: 3}
   goodPrefab: {fileID: 5592976090718956367, guid: bf44e0f1754a443779b30d59b13facb4, type: 3}
   perfectPrefab: {fileID: 4090848258105182254, guid: 5dc6097a403644fb495fb03d8a393bd0, type: 3}
@@ -869,7 +785,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   noteRestriction: 5
-  input: 100
+  input: 115
   enemyPrefab: {fileID: 1170995993924396624, guid: 531aeea068a4c4e64bb39642328f2ef2, type: 3}
   goodPrefab: {fileID: 5592976090718956367, guid: bf44e0f1754a443779b30d59b13facb4, type: 3}
   perfectPrefab: {fileID: 4090848258105182254, guid: 5dc6097a403644fb495fb03d8a393bd0, type: 3}
@@ -1017,12 +933,12 @@ MonoBehaviour:
   - {fileID: 1508669394}
   midiName: test2.mid
   inputDelay: 0
-  perfectMargin: 0.7
-  goodMargin: 2.1
+  perfectMargin: 0.1
+  goodMargin: 0.2
   songDelayInSeconds: 0
   noteTimeOnScreen: 2
   noteSpawnPos: 20
-  noteAttackPos: 5
+  noteAttackPos: -5
 --- !u!4 &1726633546
 Transform:
   m_ObjectHideFlags: 0
