@@ -546,7 +546,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 9353d820fca73457993688c7cb9deca6, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 45adf96f4d5b143408e91222123e1fa0, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -931,7 +931,7 @@ MonoBehaviour:
   - {fileID: 1880521333}
   - {fileID: 1787777543}
   - {fileID: 1508669394}
-  midiName: test2.mid
+  midiName: level_1.mid
   inputDelay: 0
   perfectMargin: 0.1
   goodMargin: 0.2
