@@ -87,10 +87,10 @@ public class Columns : MonoBehaviour
                     Destroy(enemies[input_i].gameObject);
                     input_i++;
                 }
-                // else
-                // {
-                //     // Lower health by attacking at offest time
-                // }
+                else
+                {
+                    Miss();
+                }
             }
             if(timeStamp + goodMargin  < audioTime)
             {
@@ -101,6 +101,13 @@ public class Columns : MonoBehaviour
                 input_i++;
             }
         } 
+        // // Song end
+        // if (spawn_i == timeStamps.Count)
+        // {
+        //     // Canvas.SetActive(true)
+        //     return;
+        // }
+        // ScoreManager.CalculateAccuracy();
     }
     private void Good(double margin)
     {
