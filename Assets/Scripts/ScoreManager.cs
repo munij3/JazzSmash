@@ -6,16 +6,18 @@ using TMPro;
 public class ScoreManager : MonoBehaviour
 {
     public Columns columns;
-    public static ScoreManager scoreManager;
+    public TrackManager trackManager;
+    public GameManager gameManager;
+    public static ScoreManager scoreManager; // score manager instance for public access
     // public AudioSource goodEffect;
     // public AudioSource perfectEffect;
     public AudioSource missEffect;
-    public TMPro.TextMeshProUGUI scoreText;
-    public TMPro.TextMeshProUGUI comboText;
-    public TMPro.TextMeshProUGUI healthText;
-    public TMPro.TextMeshProUGUI accuracyText;
-    public TMPro.TextMeshProUGUI finalScoreText;
-    public TMPro.TextMeshProUGUI notesHitText;
+    public TMP_Text scoreText;
+    public TMP_Text comboText;
+    public TMP_Text healthText;
+    public TMP_Text accuracyText;
+    public TMP_Text finalScoreText;
+    public TMP_Text notesHitText;
     static int combo;
     static int score;
     static double accuracy;
@@ -24,18 +26,14 @@ public class ScoreManager : MonoBehaviour
     static double totalErrorMargin;
     static int playerHealth;
 
-    private void Awake()
-    {
-        scoreText = GetComponent<TMPro.TextMeshProUGUI>();
-        comboText = GetComponent<TMPro.TextMeshProUGUI>();
-        healthText = GetComponent<TMPro.TextMeshProUGUI>();
-        accuracyText = GetComponent<TMPro.TextMeshProUGUI>();
-        finalScoreText = GetComponent<TMPro.TextMeshProUGUI>();
-        notesHitText = GetComponent<TMPro.TextMeshProUGUI>();
-    }
+    // private void Awake() {
+    // }
     void Start()
     {
         scoreManager = this;
+
+        gameManager = GetComponent<GameManager>();
+
         combo = 1;
         score = 0;
         accuracy = 0;
@@ -43,75 +41,146 @@ public class ScoreManager : MonoBehaviour
         goodHitCount = 0;
         totalErrorMargin = 0;
         playerHealth = 10;
-        columns = GetComponent<Columns>();
+
+        scoreText.text = $"Score: {score}";
+        comboText.text = $"Score: {combo}";
+        healthText.text = $"Score: {playerHealth}";
     }
 
-    public static void Good(double margin)
+    public void Good(double margin)
     {
-        playerHealth++;
+        totalErrorMargin += margin;
         perfectHitCount = 0;
         goodHitCount++;
+        playerHealth++;
+        StartCoroutine(HealthPulsation(playerHealth));
         if(goodHitCount == 16)
         {
             combo++;
         }
+        StartCoroutine(ComboPulsation(combo));
         score += 10 * combo;
-        totalErrorMargin += margin;
+        StartCoroutine(ScorePulsation(score));
         // scoreManager.goodEffect.Play();
     }
-    public static void Perfect(double margin)
+    public void Perfect(double margin)
     {
         playerHealth++;
         perfectHitCount++;
+        StartCoroutine(HealthPulsation(playerHealth));
         if(perfectHitCount == 8)
         {
             combo++;
         }
+        StartCoroutine(ComboPulsation(combo));
         score += 20 * combo;
+        StartCoroutine(ScorePulsation(score));
         totalErrorMargin += margin;
         // scoreManager.perfectEffect.Play();
     }
-    public static void Miss()
+    public void Miss()
     {
         playerHealth -= 2;
+        StartCoroutine(HealthPulsation(playerHealth));
         combo = 1;
         goodHitCount = 0;
         perfectHitCount = 0;
+        StartCoroutine(ComboPulsation(combo));
+        score -= 15;
+        StartCoroutine(ScorePulsation(score));
+        totalErrorMargin += TrackManager.trackManager.goodMargin;
         // scoreManager.missEffect.Play();
     }
-    
-    private void Update()
+    void Update()
     {
-        scoreText.text = $"Score: {score.ToString()}";
-        comboText.text = $"Combo: x{combo.ToString()}";
-        healthText.text = $"Health: {playerHealth.ToString()}";
-
-        // CAMBIAR AL FINAL DEL NIVEL
+        scoreText.text = $"Score: {score}";
+        comboText.text = $"Combo: x{combo}";
+        healthText.text = $"Health: {playerHealth}";
+        
+        if (playerHealth == 0)
+        {
+            gameManager.FailedLevel();
+        }
+    }
+    public void FinalResults()
+    {
         finalScoreText.text = $"Total score: {score}";
-        accuracyText.text = $"Overal accuracy: {CalculateAccuracy(columns.timeStamps.Count).ToString}%";
+        accuracyText.text = $"Overal accuracy: {CalculateAccuracy(columns.timeStamps.Count)}%";
         notesHitText.text = $"Notes hit: {columns.amountOfNotesHit}/{columns.timeStamps.Count}";
     }
     public double CalculateAccuracy(int timeStampCount)
     {
-        accuracy = (timeStampCount * TrackManager.trackManager.goodMargin) - totalErrorMargin;
+        double acceptedPerfectAccuracy = timeStampCount * TrackManager.trackManager.perfectMargin; // Amount of possible perfect margins
+        double acceptedGoodAccuracy = timeStampCount * TrackManager.trackManager.goodMargin; // Amount of possible good margins
+        double marginRange = acceptedGoodAccuracy - acceptedPerfectAccuracy; // Margin range between accepted margins
+
+        if (totalErrorMargin <= acceptedPerfectAccuracy)
+        {
+            return accuracy = 100;
+        }
+        else
+        {
+            return accuracy = (totalErrorMargin * 100) / marginRange;
+        }
     }
-    // private IEnumerator ScorePulsation(int givenScore)
-    // {
-    //     /* Co-routine for score pulsation when updated */
 
-    //     for (float i = 1f; i < 1.2f; i += 0.05f)
-    //     {
-    //         scoreText.rectTransform.localScale = new Vector3(i, i, i);
-    //         yield return new WaitForEndOfFrame();
-    //     }
-    //     scoreText.rectTransform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
-    //     score = givenScore;
+    /* TEXT COROUTINES */
 
-    //     for (float i = 1.2f; i >= 1f; i -= 0.05f)
-    //     {
-    //         scoreText.rectTransform.localScale = new Vector3(i, i, i);
-    //         yield return new WaitForEndOfFrame();
-    //     }
-    //     scoreText.rectTransform.localScale = new Vector3(1f, 1f, 1f);
-    // }
+    private static IEnumerator ScorePulsation(int givenScore)
+    {
+        /* Co-routine for score pulsation when updated */
+
+        for (float i = 1f; i < 1.2f; i += 0.05f)
+        {
+            scoreManager.scoreText.rectTransform.localScale = new Vector3(i, i, i);
+            yield return new WaitForEndOfFrame();
+        }
+        scoreManager.scoreText.rectTransform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+        score = givenScore;
+
+        for (float i = 1.2f; i >= 1f; i -= 0.05f)
+        {
+            scoreManager.scoreText.rectTransform.localScale = new Vector3(i, i, i);
+            yield return new WaitForEndOfFrame();
+        }
+        scoreManager.scoreText.rectTransform.localScale = new Vector3(1f, 1f, 1f);
+    }
+    private static IEnumerator ComboPulsation(int givenCombo)
+    {
+        /* Co-routine for score pulsation when updated */
+
+        for (float i = 1f; i < 1.2f; i += 0.05f)
+        {
+            scoreManager.comboText.rectTransform.localScale = new Vector3(i, i, i);
+            yield return new WaitForEndOfFrame();
+        }
+        scoreManager.comboText.rectTransform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+        accuracy = givenCombo;
+
+        for (float i = 1.2f; i >= 1f; i -= 0.05f)
+        {
+            scoreManager.comboText.rectTransform.localScale = new Vector3(i, i, i);
+            yield return new WaitForEndOfFrame();
+        }
+        scoreManager.comboText.rectTransform.localScale = new Vector3(1f, 1f, 1f);
+    }
+    private static IEnumerator HealthPulsation(int givenHealth)
+    {
+        /* Co-routine for score pulsation when updated */
+
+        for (float i = 1f; i < 1.2f; i += 0.05f)
+        {
+            scoreManager.healthText.rectTransform.localScale = new Vector3(i, i, i);
+            yield return new WaitForEndOfFrame();
+        }
+        scoreManager.healthText.rectTransform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+        playerHealth = givenHealth;
+
+        for (float i = 1.2f; i >= 1f; i -= 0.05f)
+        {
+            scoreManager.healthText.rectTransform.localScale = new Vector3(i, i, i);
+            yield return new WaitForEndOfFrame();
+        }
+        scoreManager.healthText.rectTransform.localScale = new Vector3(1f, 1f, 1f);
+    }
 }

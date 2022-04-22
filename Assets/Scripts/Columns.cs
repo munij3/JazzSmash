@@ -8,8 +8,10 @@ using Melanchall.DryWetMidi.Interaction;
 
 public class Columns : MonoBehaviour
 {
+    public static Columns columns; // Columns instance for public access
     public Melanchall.DryWetMidi.MusicTheory.NoteName noteRestriction; // Restricts notes to their corresponding key press
     public GameManager gameManager;
+    public ScoreManager scoreManager;
     public KeyCode input; // Input for any given lane
     public GameObject enemyPrefab; // Prefabs to spawn 
     public GameObject goodPrefab; // Feedback message prefab instance
@@ -28,7 +30,12 @@ public class Columns : MonoBehaviour
 
     Vector3 offset = new Vector3(0, -5.6f, 0);
 
-    void Start(){}
+    void Start()
+    {
+        gameManager = GetComponent<GameManager>();
+        
+        scoreManager = GameObject.FindGameObjectWithTag("scoreManager").GetComponent<ScoreManager>();
+    }
 
     public void SetTimeStamps(Melanchall.DryWetMidi.Interaction.Note[] array)
     {
@@ -76,7 +83,7 @@ public class Columns : MonoBehaviour
                 if(absHitTime < perfectMargin)
                 {
                     /* Hit within the perfect margin */
-                    Perfect(absHitTime - timeStamp);
+                    scoreManager.Perfect(absHitTime - timeStamp);
                     Destroy(enemies[input_i].gameObject);
                     print($"Perfect! hit enemy {input_i} with a {Math.Round(absHitTime, 2)} second margin");
                     var message = Instantiate(perfectPrefab, transform.position + offset, Quaternion.identity);
@@ -86,7 +93,7 @@ public class Columns : MonoBehaviour
                 else if (absHitTime < goodMargin)
                 {
                     /* Hit within the good margin */
-                    Good(absHitTime - timeStamp);
+                    scoreManager.Good(absHitTime - timeStamp);
                     print($"Good! hit enemy {input_i} with a {Math.Round(absHitTime, 2)} second margin");
                     var message = Instantiate(goodPrefab, transform.position + offset, Quaternion.identity);
                     Destroy(enemies[input_i].gameObject);
@@ -95,14 +102,14 @@ public class Columns : MonoBehaviour
                 }
                 else
                 {
-                    /* Undesired key input lowers player health */
-                    Miss();
+                    /* Undesired key input lowers player health eitherways */
+                    scoreManager.Miss();
                 }
             }
             if(timeStamp + goodMargin  < audioTime)
             {
                 /* If the current time in the song is greater than the timestamp conbined with the margin of error, then the player has missed */
-                Miss();
+                scoreManager.Miss();
                 print($"Missed enemy {input_i}");
                 var message = Instantiate(missPrefab, transform.position + offset, Quaternion.identity);
                 input_i++;
@@ -113,18 +120,5 @@ public class Columns : MonoBehaviour
         {
             gameManager.CompleteLevel();
         }
-        
-    }
-    private void Good(double margin)
-    {
-        ScoreManager.Good(margin);
-    }
-    private void Perfect(double margin)
-    {
-        ScoreManager.Perfect(margin);
-    }
-    private void Miss()
-    {
-        ScoreManager.Miss();
     }
 }

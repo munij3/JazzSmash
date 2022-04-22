@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelComplete : MonoBehaviour
-{    
+public class LevelFinished : MonoBehaviour
+{
     public void LoadMenu()
     {
         // NEEDS SCENE NAME
