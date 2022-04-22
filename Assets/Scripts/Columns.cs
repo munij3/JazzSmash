@@ -9,6 +9,7 @@ using Melanchall.DryWetMidi.Interaction;
 public class Columns : MonoBehaviour
 {
     public Melanchall.DryWetMidi.MusicTheory.NoteName noteRestriction; // Restricts notes to their corresponding key press
+    public GameManager gameManager;
     public KeyCode input; // Input for any given lane
     public GameObject enemyPrefab; // Prefabs to spawn 
     public GameObject goodPrefab; // Feedback message prefab instance
@@ -19,6 +20,7 @@ public class Columns : MonoBehaviour
     public double timeStamp;
     public double audioTime;
     public double sourceTime;
+    public int amountOfNotesHit; // Keeps track of number of good or perfect notes that have been hit
 
     /* Indexes that keep track of which timespamps from the list need to be spawned, and which input needs to be pressed */
     int spawn_i = 0; // Keeps track of enemy timestamps that need to be spawned
@@ -73,22 +75,27 @@ public class Columns : MonoBehaviour
         
                 if(absHitTime < perfectMargin)
                 {
+                    /* Hit within the perfect margin */
                     Perfect(absHitTime - timeStamp);
                     Destroy(enemies[input_i].gameObject);
                     print($"Perfect! hit enemy {input_i} with a {Math.Round(absHitTime, 2)} second margin");
                     var message = Instantiate(perfectPrefab, transform.position + offset, Quaternion.identity);
+                    amountOfNotesHit++;
                     input_i++;
                 }
                 else if (absHitTime < goodMargin)
                 {
+                    /* Hit within the good margin */
                     Good(absHitTime - timeStamp);
                     print($"Good! hit enemy {input_i} with a {Math.Round(absHitTime, 2)} second margin");
                     var message = Instantiate(goodPrefab, transform.position + offset, Quaternion.identity);
                     Destroy(enemies[input_i].gameObject);
+                    amountOfNotesHit++;
                     input_i++;
                 }
                 else
                 {
+                    /* Undesired key input lowers player health */
                     Miss();
                 }
             }
@@ -101,13 +108,12 @@ public class Columns : MonoBehaviour
                 input_i++;
             }
         } 
-        // // Song end
-        // if (spawn_i == timeStamps.Count)
-        // {
-        //     // Canvas.SetActive(true)
-        //     return;
-        // }
-        // ScoreManager.CalculateAccuracy();
+        // Song end
+        if (spawn_i == timeStamps.Count)
+        {
+            gameManager.CompleteLevel();
+        }
+        
     }
     private void Good(double margin)
     {
