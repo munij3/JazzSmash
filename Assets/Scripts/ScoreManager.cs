@@ -5,13 +5,11 @@ using TMPro;
 
 public class ScoreManager : MonoBehaviour
 {
-    public Columns columns;
-    public TrackManager trackManager;
-    public GameManager gameManager;
     public static ScoreManager scoreManager; // score manager instance for public access
+    public GameManager gameManager;
+    public AudioSource missEffect;
     // public AudioSource goodEffect;
     // public AudioSource perfectEffect;
-    public AudioSource missEffect;
     public TMP_Text scoreText;
     public TMP_Text comboText;
     public TMP_Text healthText;
@@ -31,8 +29,7 @@ public class ScoreManager : MonoBehaviour
     void Start()
     {
         scoreManager = this;
-
-        gameManager = GetComponent<GameManager>();
+        gameManager = GameObject.FindGameObjectWithTag("gameManager").GetComponent<GameManager>();
 
         combo = 1;
         score = 0;
@@ -52,7 +49,10 @@ public class ScoreManager : MonoBehaviour
         totalErrorMargin += margin;
         perfectHitCount = 0;
         goodHitCount++;
-        playerHealth++;
+        if(playerHealth < 20)
+        {
+            playerHealth++;
+        }
         StartCoroutine(HealthPulsation(playerHealth));
         if(goodHitCount == 16)
         {
@@ -65,8 +65,12 @@ public class ScoreManager : MonoBehaviour
     }
     public void Perfect(double margin)
     {
-        playerHealth++;
+        totalErrorMargin += margin;
         perfectHitCount++;
+        if(playerHealth < 20)
+        {
+            playerHealth++;
+        }
         StartCoroutine(HealthPulsation(playerHealth));
         if(perfectHitCount == 8)
         {
@@ -75,20 +79,19 @@ public class ScoreManager : MonoBehaviour
         StartCoroutine(ComboPulsation(combo));
         score += 20 * combo;
         StartCoroutine(ScorePulsation(score));
-        totalErrorMargin += margin;
         // scoreManager.perfectEffect.Play();
     }
     public void Miss()
     {
-        playerHealth -= 2;
+        totalErrorMargin += TrackManager.trackManager.goodMargin;
+        perfectHitCount = 0;
+        goodHitCount = 0;
+        playerHealth -= 1;
         StartCoroutine(HealthPulsation(playerHealth));
         combo = 1;
-        goodHitCount = 0;
-        perfectHitCount = 0;
         StartCoroutine(ComboPulsation(combo));
         score -= 15;
         StartCoroutine(ScorePulsation(score));
-        totalErrorMargin += TrackManager.trackManager.goodMargin;
         // scoreManager.missEffect.Play();
     }
     void Update()
@@ -97,7 +100,7 @@ public class ScoreManager : MonoBehaviour
         comboText.text = $"Combo: x{combo}";
         healthText.text = $"Health: {playerHealth}";
         
-        if (playerHealth == 0)
+        if (playerHealth <= 0)
         {
             gameManager.FailedLevel();
         }
@@ -105,8 +108,8 @@ public class ScoreManager : MonoBehaviour
     public void FinalResults()
     {
         finalScoreText.text = $"Total score: {score}";
-        accuracyText.text = $"Overal accuracy: {CalculateAccuracy(columns.timeStamps.Count)}%";
-        notesHitText.text = $"Notes hit: {columns.amountOfNotesHit}/{columns.timeStamps.Count}";
+        accuracyText.text = $"Overal accuracy: {CalculateAccuracy(GetComponent<Columns>().timeStamps.Count)}%";
+        notesHitText.text = $"Notes hit: {GetComponent<Columns>().amountOfNotesHit}/{GetComponent<Columns>().timeStamps.Count}";
     }
     public double CalculateAccuracy(int timeStampCount)
     {

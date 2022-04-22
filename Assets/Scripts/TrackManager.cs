@@ -14,7 +14,7 @@ public class TrackManager : MonoBehaviour
     public static TrackManager trackManager; // track manager instance for public access
     public static MidiFile midiFile; // Location on memory where the midi file will load
     public AudioSource audioSource;
-    public Columns[] columns;
+    public Columns[] cols;
     public string midiName; // Streams midi file from the MidiFiles folder 
     public int inputDelay; // delay in milioseconds for keyboard inputs
     public double perfectMargin; // Maximum time margin in seconds for a perfect note
@@ -41,7 +41,7 @@ public class TrackManager : MonoBehaviour
         notes.CopyTo(array, 0);
 
         // Set time stams for each column
-        foreach (var column in columns) column.SetTimeStamps(array);
+        foreach (var column in cols) column.SetTimeStamps(array);
 
         // Invoke StartSong or audio source after a delay
         Invoke(nameof(StartSong), songDelayInSeconds);

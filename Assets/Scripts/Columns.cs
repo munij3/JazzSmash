@@ -9,9 +9,9 @@ using Melanchall.DryWetMidi.Interaction;
 public class Columns : MonoBehaviour
 {
     public static Columns columns; // Columns instance for public access
-    public Melanchall.DryWetMidi.MusicTheory.NoteName noteRestriction; // Restricts notes to their corresponding key press
-    public GameManager gameManager;
     public ScoreManager scoreManager;
+    public GameManager gameManager;
+    public Melanchall.DryWetMidi.MusicTheory.NoteName noteRestriction; // Restricts notes to their corresponding key press
     public KeyCode input; // Input for any given lane
     public GameObject enemyPrefab; // Prefabs to spawn 
     public GameObject goodPrefab; // Feedback message prefab instance
@@ -23,17 +23,11 @@ public class Columns : MonoBehaviour
     public double audioTime;
     public double sourceTime;
     public int amountOfNotesHit; // Keeps track of number of good or perfect notes that have been hit
-
-    /* Indexes that keep track of which timespamps from the list need to be spawned, and which input needs to be pressed */
-    int spawn_i = 0; // Keeps track of enemy timestamps that need to be spawned
-    int input_i = 0; // Keeps track of key inputs that need to be pressed
-
-    Vector3 offset = new Vector3(0, -5.6f, 0);
+    Vector3 offset = new Vector3(0, -5.6f, 0); // Feedback meesage instantiation transform offset
 
     void Start()
     {
-        gameManager = GetComponent<GameManager>();
-        
+        gameManager = GameObject.FindGameObjectWithTag("gameManager").GetComponent<GameManager>();
         scoreManager = GameObject.FindGameObjectWithTag("scoreManager").GetComponent<ScoreManager>();
     }
 
@@ -50,6 +44,8 @@ public class Columns : MonoBehaviour
             }
         }
     }
+    int spawn_i = 0; // Keeps track of enemy timestamps that need to be spawned
+    int input_i = 0; // Keeps track of key inputs that need to be pressed
 
     void Update()
     {
