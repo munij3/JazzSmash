@@ -29,8 +29,8 @@ public class GameManager : MonoBehaviour
     }
     public void LoadLevel1Scene()
     {
-        levelCompleteUI.SetActive(false);
-        levelFailedUI.SetActive(false);  
+        // levelCompleteUI.SetActive(false);
+        // levelFailedUI.SetActive(false);  
         SceneManager.LoadScene(2);
     }
     public void FailedLevel()
