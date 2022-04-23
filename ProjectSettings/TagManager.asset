@@ -6,6 +6,7 @@ TagManager:
   tags:
   - scoreManager
   - gameManager
+  - trackManager
   layers:
   - Default
   - TransparentFX

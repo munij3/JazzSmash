@@ -7,6 +7,8 @@ public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager scoreManager; // score manager instance for public access
     public GameManager gameManager;
+    public TrackManager trackManager;
+    public Columns columns;
     public AudioSource missEffect;
     // public AudioSource goodEffect;
     // public AudioSource perfectEffect;
@@ -24,12 +26,11 @@ public class ScoreManager : MonoBehaviour
     static double totalErrorMargin;
     static int playerHealth;
 
-    // private void Awake() {
-    // }
     void Start()
     {
         scoreManager = this;
         gameManager = GameObject.FindGameObjectWithTag("gameManager").GetComponent<GameManager>();
+        trackManager = GameObject.FindGameObjectWithTag("trackManager").GetComponent<TrackManager>();
 
         combo = 1;
         score = 0;
@@ -103,13 +104,14 @@ public class ScoreManager : MonoBehaviour
         if (playerHealth <= 0)
         {
             gameManager.FailedLevel();
+            trackManager.audioSource.Stop();
         }
     }
-    public void FinalResults()
+    public void FinalResults(int timeStampsCount, int amountOfNotesHit)
     {
         finalScoreText.text = $"Total score: {score}";
-        accuracyText.text = $"Overal accuracy: {CalculateAccuracy(GetComponent<Columns>().timeStamps.Count)}%";
-        notesHitText.text = $"Notes hit: {GetComponent<Columns>().amountOfNotesHit}/{GetComponent<Columns>().timeStamps.Count}";
+        accuracyText.text = $"Overal accuracy: {CalculateAccuracy(timeStampsCount)}%";
+        notesHitText.text = $"Notes hit: {amountOfNotesHit}/{timeStampsCount}";
     }
     public double CalculateAccuracy(int timeStampCount)
     {

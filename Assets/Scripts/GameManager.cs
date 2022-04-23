@@ -4,34 +4,43 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager gameManager;
-    public float restartDelay = 1f; // Level restart delay
     public GameObject levelCompleteUI;
     public GameObject levelFailedUI;
+    public GameObject levelSelectMenu;
+    public GameObject mainMenuUI;
     public ScoreManager scoreManager;
-    bool gameEnded = false;
+
     public void LoadMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(0);
     }
-    public void LoadLevelScene()
+    public void LoadLevelSelect()
     {
-        SceneManager.LoadScene("LevelScene");
-    }
-
-    public void CompleteLevel()
-    {
-        if (gameEnded == false)
-        {
-            gameEnded = true;
-            levelCompleteUI.SetActive(true);
-        }
+        SceneManager.LoadScene(1);
     }
     public void RestartLevel()
     {
+        levelCompleteUI.SetActive(false);
+        levelFailedUI.SetActive(false);  
+        SceneManager.LoadScene(2);
+        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    public void LoadLevel1Scene()
+    {
+        levelCompleteUI.SetActive(false);
+        levelFailedUI.SetActive(false);  
+        SceneManager.LoadScene(2);
     }
     public void FailedLevel()
     {
+        Time.timeScale = 0f;
         levelFailedUI.SetActive(true);
+    }
+    public void CompleteLevel()
+    {
+        Time.timeScale = 0f;
+        levelCompleteUI.SetActive(true);
     }
 }

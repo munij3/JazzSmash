@@ -10,6 +10,7 @@ public class Columns : MonoBehaviour
 {
     public static Columns columns; // Columns instance for public access
     public ScoreManager scoreManager;
+    public TrackManager trackManager;
     public GameManager gameManager;
     public Melanchall.DryWetMidi.MusicTheory.NoteName noteRestriction; // Restricts notes to their corresponding key press
     public KeyCode input; // Input for any given lane
@@ -24,11 +25,14 @@ public class Columns : MonoBehaviour
     public double sourceTime;
     public int amountOfNotesHit; // Keeps track of number of good or perfect notes that have been hit
     Vector3 offset = new Vector3(0, -5.6f, 0); // Feedback meesage instantiation transform offset
+    int spawn_i = 0; // Keeps track of enemy timestamps that need to be spawned
+    int input_i = 0; // Keeps track of key inputs that need to be pressed
 
     void Start()
     {
         gameManager = GameObject.FindGameObjectWithTag("gameManager").GetComponent<GameManager>();
         scoreManager = GameObject.FindGameObjectWithTag("scoreManager").GetComponent<ScoreManager>();
+        trackManager = GameObject.FindGameObjectWithTag("trackManager").GetComponent<TrackManager>();
     }
 
     public void SetTimeStamps(Melanchall.DryWetMidi.Interaction.Note[] array)
@@ -44,12 +48,10 @@ public class Columns : MonoBehaviour
             }
         }
     }
-    int spawn_i = 0; // Keeps track of enemy timestamps that need to be spawned
-    int input_i = 0; // Keeps track of key inputs that need to be pressed
 
     void Update()
     {
-        sourceTime = TrackManager.sourceTime();
+        sourceTime = TrackManager.sourceTime(); // For debugging
         /* Won't stop until the spawn index is greater than the amount of timestamps of the track */
         if(spawn_i < timeStamps.Count)
         {
@@ -66,10 +68,10 @@ public class Columns : MonoBehaviour
         if(input_i < timeStamps.Count)
         {
             /* Will run while the amount of inputs is lower then the amount of timestamps */
-            timeStamp = timeStamps[input_i]; // Enemy time stamp
+            double timeStamp = timeStamps[input_i]; // Enemy time stamp
             double perfectMargin = TrackManager.trackManager.perfectMargin; // Perfect margin
             double goodMargin = TrackManager.trackManager.goodMargin; // Good margin
-            audioTime = TrackManager.sourceTime() - (TrackManager.trackManager.inputDelay / 1000.0); // Current song time that accounts for given delay in seconds
+            double audioTime = TrackManager.sourceTime() - (TrackManager.trackManager.inputDelay / 1000.0); // Current song time that accounts for given delay in seconds
 
             if(Input.GetKeyDown(input))
             {
@@ -110,11 +112,14 @@ public class Columns : MonoBehaviour
                 var message = Instantiate(missPrefab, transform.position + offset, Quaternion.identity);
                 input_i++;
             }
-        } 
-        // Song end
-        if (spawn_i == timeStamps.Count)
+        }
+
+        if(spawn_i == timeStamps.Count)
         {
+            scoreManager.FinalResults(timeStamps.Count, amountOfNotesHit);
             gameManager.CompleteLevel();
+            trackManager.audioSource.Stop();
+            enabled = false;
         }
     }
 }
