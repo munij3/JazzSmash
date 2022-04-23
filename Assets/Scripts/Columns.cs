@@ -30,6 +30,7 @@ public class Columns : MonoBehaviour
 
     void Start()
     {
+        enabled = true;
         gameManager = GameObject.FindGameObjectWithTag("gameManager").GetComponent<GameManager>();
         scoreManager = GameObject.FindGameObjectWithTag("scoreManager").GetComponent<ScoreManager>();
         trackManager = GameObject.FindGameObjectWithTag("trackManager").GetComponent<TrackManager>();
