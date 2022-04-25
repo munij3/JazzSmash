@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     public void RestartLevel()
     {
         paused = false;
+        Time.timeScale = 1f;
         levelCompleteUI.SetActive(false);
         levelFailedUI.SetActive(false);  
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -28,6 +29,7 @@ public class GameManager : MonoBehaviour
     public void LoadLevel1Scene()
     {
         paused = false;
+        Time.timeScale = 1f;
         SceneManager.LoadScene(2);
     }
     public void FailedLevel()

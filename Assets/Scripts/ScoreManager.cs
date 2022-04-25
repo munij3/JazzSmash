@@ -101,17 +101,19 @@ public class ScoreManager : MonoBehaviour
         comboText.text = $"Combo: x{combo}";
         healthText.text = $"Health: {playerHealth}";
         
+        /* Checks wether the players health has been depleted in order to display a failed level splash screen, and display obtained scores */
         if (playerHealth <= 0)
         {
+            FinalResults();
             gameManager.FailedLevel();
             trackManager.audioSource.Stop();
         }
     }
-    public void FinalResults(int timeStampsCount, int amountOfNotesHit)
+    public void FinalResults()
     {
         finalScoreText.text = $"Total score: {score}";
-        accuracyText.text = $"Overal accuracy: {CalculateAccuracy(timeStampsCount)}%";
-        notesHitText.text = $"Notes hit: {amountOfNotesHit}/{timeStampsCount}";
+        accuracyText.text = $"Overal accuracy: {CalculateAccuracy(FindObjectOfType<Columns>().timeStamps.Count)}%";
+        notesHitText.text = $"Notes hit: {FindObjectOfType<Columns>().amountOfNotesHit}/{FindObjectOfType<Columns>().timeStamps.Count}";
     }
     public double CalculateAccuracy(int timeStampCount)
     {
@@ -152,7 +154,7 @@ public class ScoreManager : MonoBehaviour
     }
     private static IEnumerator ComboPulsation(int givenCombo)
     {
-        /* Co-routine for score pulsation when updated */
+        /* Co-routine for combo pulsation when updated */
 
         for (float i = 1f; i < 1.2f; i += 0.05f)
         {
@@ -171,7 +173,7 @@ public class ScoreManager : MonoBehaviour
     }
     private static IEnumerator HealthPulsation(int givenHealth)
     {
-        /* Co-routine for score pulsation when updated */
+        /* Co-routine for health pulsation when updated */
 
         for (float i = 1f; i < 1.2f; i += 0.05f)
         {

@@ -117,11 +117,11 @@ public class Columns : MonoBehaviour
                 }
             }
 
+            /* Checks wether all notes have been hit after the last note is instantiated */
             if(spawn_i == timeStamps.Count)
             {
-                scoreManager.FinalResults(timeStamps.Count, amountOfNotesHit);
+                scoreManager.FinalResults();
                 gameManager.CompleteLevel();
-                trackManager.audioSource.Stop();
                 enabled = false;
             }
         }
