@@ -66,61 +66,64 @@ public class Columns : MonoBehaviour
             }
         }
 
-        if(input_i < timeStamps.Count)
+        if(gameManager.paused == false) 
         {
-            /* Will run while the amount of inputs is lower then the amount of timestamps */
-            double timeStamp = timeStamps[input_i]; // Enemy time stamp
-            double perfectMargin = TrackManager.trackManager.perfectMargin; // Perfect margin
-            double goodMargin = TrackManager.trackManager.goodMargin; // Good margin
-            double audioTime = TrackManager.sourceTime() - (TrackManager.trackManager.inputDelay / 1000.0); // Current song time that accounts for given delay in seconds
-
-            if(Input.GetKeyDown(input))
+            if(input_i < timeStamps.Count)
             {
-                /* Check if the key press in the current song audio time does not exceed the given margins */
-                double absHitTime = Math.Abs(audioTime - timeStamp);
-        
-                if(absHitTime < perfectMargin)
+                /* Will run while the amount of inputs is lower then the amount of timestamps */
+                double timeStamp = timeStamps[input_i]; // Enemy time stamp
+                double perfectMargin = TrackManager.trackManager.perfectMargin; // Perfect margin
+                double goodMargin = TrackManager.trackManager.goodMargin; // Good margin
+                double audioTime = TrackManager.sourceTime() - (TrackManager.trackManager.inputDelay / 1000.0); // Current song time that accounts for given delay in seconds
+
+                if(Input.GetKeyDown(input))
                 {
-                    /* Hit within the perfect margin */
-                    scoreManager.Perfect(absHitTime - timeStamp);
-                    Destroy(enemies[input_i].gameObject);
-                    print($"Perfect! hit enemy {input_i} with a {Math.Round(absHitTime, 2)} second margin");
-                    var message = Instantiate(perfectPrefab, transform.position + offset, Quaternion.identity);
-                    amountOfNotesHit++;
-                    input_i++;
+                    /* Check if the key press in the current song audio time does not exceed the given margins */
+                    double absHitTime = Math.Abs(audioTime - timeStamp);
+            
+                    if(absHitTime < perfectMargin)
+                    {
+                        /* Hit within the perfect margin */
+                        scoreManager.Perfect(absHitTime - timeStamp);
+                        Destroy(enemies[input_i].gameObject);
+                        print($"Perfect! hit enemy {input_i} with a {Math.Round(absHitTime, 2)} second margin");
+                        var message = Instantiate(perfectPrefab, transform.position + offset, Quaternion.identity);
+                        amountOfNotesHit++;
+                        input_i++;
+                    }
+                    else if (absHitTime < goodMargin)
+                    {
+                        /* Hit within the good margin */
+                        scoreManager.Good(absHitTime - timeStamp);
+                        print($"Good! hit enemy {input_i} with a {Math.Round(absHitTime, 2)} second margin");
+                        var message = Instantiate(goodPrefab, transform.position + offset, Quaternion.identity);
+                        Destroy(enemies[input_i].gameObject);
+                        amountOfNotesHit++;
+                        input_i++;
+                    }
+                    else
+                    {
+                        /* Undesired key input lowers player health eitherways */
+                        scoreManager.Miss();
+                    }
                 }
-                else if (absHitTime < goodMargin)
+                if(timeStamp + goodMargin  < audioTime)
                 {
-                    /* Hit within the good margin */
-                    scoreManager.Good(absHitTime - timeStamp);
-                    print($"Good! hit enemy {input_i} with a {Math.Round(absHitTime, 2)} second margin");
-                    var message = Instantiate(goodPrefab, transform.position + offset, Quaternion.identity);
-                    Destroy(enemies[input_i].gameObject);
-                    amountOfNotesHit++;
-                    input_i++;
-                }
-                else
-                {
-                    /* Undesired key input lowers player health eitherways */
+                    /* If the current time in the song is greater than the timestamp conbined with the margin of error, then the player has missed */
                     scoreManager.Miss();
+                    print($"Missed enemy {input_i}");
+                    var message = Instantiate(missPrefab, transform.position + offset, Quaternion.identity);
+                    input_i++;
                 }
             }
-            if(timeStamp + goodMargin  < audioTime)
-            {
-                /* If the current time in the song is greater than the timestamp conbined with the margin of error, then the player has missed */
-                scoreManager.Miss();
-                print($"Missed enemy {input_i}");
-                var message = Instantiate(missPrefab, transform.position + offset, Quaternion.identity);
-                input_i++;
-            }
-        }
 
-        if(spawn_i == timeStamps.Count)
-        {
-            scoreManager.FinalResults(timeStamps.Count, amountOfNotesHit);
-            gameManager.CompleteLevel();
-            trackManager.audioSource.Stop();
-            enabled = false;
+            if(spawn_i == timeStamps.Count)
+            {
+                scoreManager.FinalResults(timeStamps.Count, amountOfNotesHit);
+                gameManager.CompleteLevel();
+                trackManager.audioSource.Stop();
+                enabled = false;
+            }
         }
     }
 }

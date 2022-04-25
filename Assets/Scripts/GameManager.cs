@@ -8,11 +8,10 @@ public class GameManager : MonoBehaviour
     public GameObject levelFailedUI;
     public GameObject levelSelectMenu;
     public GameObject mainMenuUI;
-    public ScoreManager scoreManager;
+    public bool paused;
 
     public void LoadMenu()
     {
-        Time.timeScale = 1f;
         SceneManager.LoadScene(0);
     }
     public void LoadLevelSelect()
@@ -21,23 +20,25 @@ public class GameManager : MonoBehaviour
     }
     public void RestartLevel()
     {
+        paused = false;
         levelCompleteUI.SetActive(false);
         levelFailedUI.SetActive(false);  
-        SceneManager.LoadScene(2);
-        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     public void LoadLevel1Scene()
     {
+        paused = false;
         SceneManager.LoadScene(2);
     }
     public void FailedLevel()
     {
+        paused = true;
         Time.timeScale = 0f;
         levelFailedUI.SetActive(true);
     }
     public void CompleteLevel()
     {
+        paused = true;
         Time.timeScale = 0f;
         levelCompleteUI.SetActive(true);
     }
