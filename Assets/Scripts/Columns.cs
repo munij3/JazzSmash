@@ -20,9 +20,6 @@ public class Columns : MonoBehaviour
     public GameObject missPrefab; // Feedback message prefab instance
     List<Enemy> enemies = new List<Enemy>(); // Keeps track of spawned notes
     public List<double> timeStamps = new List<double>(); // Timestamps of the song when the player needs to input keys for attack
-    public double timeStamp;
-    public double audioTime;
-    public double sourceTime;
     public int amountOfNotesHit; // Keeps track of number of good or perfect notes that have been hit
     Vector3 offset = new Vector3(0, -5.6f, 0); // Feedback meesage instantiation transform offset
     int spawn_i = 0; // Keeps track of enemy timestamps that need to be spawned
@@ -30,7 +27,7 @@ public class Columns : MonoBehaviour
 
     void Start()
     {
-        enabled = true;
+        columns = this;
         gameManager = GameObject.FindGameObjectWithTag("gameManager").GetComponent<GameManager>();
         scoreManager = GameObject.FindGameObjectWithTag("scoreManager").GetComponent<ScoreManager>();
         trackManager = GameObject.FindGameObjectWithTag("trackManager").GetComponent<TrackManager>();
@@ -45,14 +42,13 @@ public class Columns : MonoBehaviour
             if(note.NoteName == noteRestriction)
             {
                 var metricTimeSpan = TimeConverter.ConvertTo<MetricTimeSpan>(note.Time, TrackManager.midiFile.GetTempoMap()); // Convert note time to seconds by feeding the tempo map from the track manager
-                timeStamps.Add((double)metricTimeSpan.Minutes * 60f + metricTimeSpan.Seconds + (double)metricTimeSpan.Milliseconds / 1000f); // Add converted time stamps to the time stamps list
+                timeStamps.Add((double)metricTimeSpan.Minutes * 60f + metricTimeSpan.Seconds + (double)metricTimeSpan.Milliseconds / 1000f); // Add converted time stamps to the column's time stamps list
             }
         }
     }
 
     void Update()
     {
-        sourceTime = TrackManager.sourceTime(); // For debugging
         /* Won't stop until the spawn index is greater than the amount of timestamps of the track */
         if(spawn_i < timeStamps.Count)
         {
@@ -117,12 +113,10 @@ public class Columns : MonoBehaviour
                 }
             }
 
-            /* Checks wether all notes have been hit after the last note is instantiated */
-            if(spawn_i == timeStamps.Count)
+            /* Checks if  */
+            if()
             {
-                scoreManager.FinalResults();
                 gameManager.CompleteLevel();
-                enabled = false;
             }
         }
     }

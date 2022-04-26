@@ -20,13 +20,15 @@ public class TrackManager : MonoBehaviour
     public float noteTimeOnScreen; // Note duration on screen in seconds
     public float noteSpawnPos; // Note spawn Y position 
     public float noteAttackPos; // Note attack Y position 
+    public double songLength;
+
     public float noteDespawnPos 
     {
         get 
         {
             return noteAttackPos - (noteSpawnPos - noteAttackPos);
         }
-    } // Note despawn Y position for the notes ()
+    } // Note despawn Y position for the notes
 
     void Start()
     {
@@ -39,6 +41,15 @@ public class TrackManager : MonoBehaviour
 
         // Set time stams for each column
         foreach (var column in columns) column.SetTimeStamps(array);
+
+        // Obtain total song length
+        foreach (var column in columns)
+        {
+            foreach (var timeStamp in column.timeStamps)
+            {
+                songLength += timeStamp;
+            }
+        }
 
         // Invoke StartSong or audio source after a delay
         Invoke(nameof(StartSong), songDelayInSeconds);

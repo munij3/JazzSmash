@@ -5,10 +5,10 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager gameManager;
     public GameObject levelCompleteUI;
-    public GameObject levelFailedUI;
     public GameObject levelSelectMenu;
     public GameObject mainMenuUI;
     public bool paused;
+    public bool levelStatus = false;
 
     public void LoadMenu()
     {
@@ -21,27 +21,30 @@ public class GameManager : MonoBehaviour
     public void RestartLevel()
     {
         paused = false;
-        Time.timeScale = 1f;
         levelCompleteUI.SetActive(false);
-        levelFailedUI.SetActive(false);  
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     public void LoadLevel1Scene()
     {
         paused = false;
-        Time.timeScale = 1f;
         SceneManager.LoadScene(2);
     }
     public void FailedLevel()
     {
         paused = true;
-        Time.timeScale = 0f;
-        levelFailedUI.SetActive(true);
+        FindObjectOfType<ScoreManager>().GetResults(levelStatus);
+        FindObjectOfType<TrackManager>().audioSource.Stop();
+        FindObjectOfType<Columns>().enabled = false;
+        FindObjectOfType<ScoreManager>().enabled = false;
+        levelCompleteUI.SetActive(true);
     }
     public void CompleteLevel()
     {
         paused = true;
-        Time.timeScale = 0f;
+        levelStatus = true;
+        FindObjectOfType<ScoreManager>().GetResults(levelStatus);
+        FindObjectOfType<Columns>().enabled = false;
+        FindObjectOfType<ScoreManager>().enabled = false;
         levelCompleteUI.SetActive(true);
     }
 }

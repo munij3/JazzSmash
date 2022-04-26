@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
 
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager scoreManager; // score manager instance for public access
-    public GameManager gameManager;
-    public TrackManager trackManager;
-    public Columns columns;
     public AudioSource missEffect;
+    public TrackManager trackManager;
     // public AudioSource goodEffect;
     // public AudioSource perfectEffect;
     public TMP_Text scoreText;
@@ -18,19 +18,19 @@ public class ScoreManager : MonoBehaviour
     public TMP_Text accuracyText;
     public TMP_Text finalScoreText;
     public TMP_Text notesHitText;
+    public TMP_Text statusText;
+    static double totalErrorMargin;
+    static double accuracy;
     static int combo;
     static int score;
-    static double accuracy;
     static int perfectHitCount;
     static int goodHitCount;
-    static double totalErrorMargin;
     static int playerHealth;
+    static int timeStampCount;
 
     void Start()
     {
         scoreManager = this;
-        gameManager = GameObject.FindGameObjectWithTag("gameManager").GetComponent<GameManager>();
-        trackManager = GameObject.FindGameObjectWithTag("trackManager").GetComponent<TrackManager>();
 
         combo = 1;
         score = 0;
@@ -71,8 +71,8 @@ public class ScoreManager : MonoBehaviour
         if(playerHealth < 20)
         {
             playerHealth++;
+            StartCoroutine(HealthPulsation(playerHealth));
         }
-        StartCoroutine(HealthPulsation(playerHealth));
         if(perfectHitCount == 8)
         {
             combo++;
@@ -87,7 +87,7 @@ public class ScoreManager : MonoBehaviour
         totalErrorMargin += TrackManager.trackManager.goodMargin;
         perfectHitCount = 0;
         goodHitCount = 0;
-        playerHealth -= 1;
+        playerHealth -= 2;
         StartCoroutine(HealthPulsation(playerHealth));
         combo = 1;
         StartCoroutine(ComboPulsation(combo));
@@ -104,21 +104,41 @@ public class ScoreManager : MonoBehaviour
         /* Checks wether the players health has been depleted in order to display a failed level splash screen, and display obtained scores */
         if (playerHealth <= 0)
         {
-            FinalResults();
-            gameManager.FailedLevel();
-            trackManager.audioSource.Stop();
+            FindObjectOfType<GameManager>().FailedLevel();
         }
     }
-    public void FinalResults()
+    public void GetResults(bool levelStatus)
     {
+        timeStampCount = TrackManager.midiFile.GetNotes().Count;
+        // for (var i = 0; i < TrackManager.trackManager.columns.Length; i++) 
+        // {
+        //     timeStampCount += TrackManager.trackManager.columns[i].timeStamps.Count;
+        // }
+        if (FindObjectOfType<Columns>().amountOfNotesHit == 0)
+        {
+            accuracy = 0;
+        }
+        else
+        {
+            accuracy = CalculateAccuracy(timeStampCount);
+        }
+        if (levelStatus == true)
+        {
+            statusText.text = "Complete!";
+        }
+        else
+        {
+            statusText.text = "You failed!";
+        }
+        /* Calculate parameters regardless of level status set in GameManager */
         finalScoreText.text = $"Total score: {score}";
-        accuracyText.text = $"Overal accuracy: {CalculateAccuracy(FindObjectOfType<Columns>().timeStamps.Count)}%";
-        notesHitText.text = $"Notes hit: {FindObjectOfType<Columns>().amountOfNotesHit}/{FindObjectOfType<Columns>().timeStamps.Count}";
+        accuracyText.text = $"Overal accuracy: {accuracy}%";
+        notesHitText.text = $"Notes hit: {FindObjectOfType<Columns>().amountOfNotesHit}/{timeStampCount}";
     }
     public double CalculateAccuracy(int timeStampCount)
     {
-        double acceptedPerfectAccuracy = timeStampCount * TrackManager.trackManager.perfectMargin; // Amount of possible perfect margins
-        double acceptedGoodAccuracy = timeStampCount * TrackManager.trackManager.goodMargin; // Amount of possible good margins
+        double acceptedPerfectAccuracy = timeStampCount * FindObjectOfType<TrackManager>().perfectMargin; // Amount of possible perfect margins
+        double acceptedGoodAccuracy = timeStampCount * FindObjectOfType<TrackManager>().goodMargin; // Amount of possible good margins
         double marginRange = acceptedGoodAccuracy - acceptedPerfectAccuracy; // Margin range between accepted margins
 
         if (totalErrorMargin <= acceptedPerfectAccuracy)
