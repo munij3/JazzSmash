@@ -16,10 +16,10 @@ public class TrackManager : MonoBehaviour
     public double goodMargin; // Maximum time margin in seconds for a good note
     public float songDelayInSeconds; // Song start delay
     public float noteTimeOnScreen; // Note duration on screen in seconds
-    public float noteSpawnPos; // Note spawn Y position 
-    public float noteAttackPos; // Note attack Y position 
-    public double currentSongTime;
-
+    public float noteSpawnPos; // Note spawn Y position
+    public float noteAttackPos; // Note attack Y position
+    public float currentSongTime; // Current audio source time when calling the SourceTime function
+    public float audioSourceDuration; // Duration of the provided audio source
     public float noteDespawnPos 
     {
         get 
@@ -33,6 +33,8 @@ public class TrackManager : MonoBehaviour
         trackManager = this;
 
         midiFile = MidiFile.Read(Application.streamingAssetsPath  + "/" + midiName);
+
+        audioSourceDuration = audioSource.clip.length;
 
         /* Obtain notes and a count of notes from the midi file, then copy them to an array and set timestamps for each column */
         var notes = midiFile.GetNotes();
@@ -56,6 +58,6 @@ public class TrackManager : MonoBehaviour
     }
     void Update()
     {
-        currentSongTime = SourceTime();
+        currentSongTime = (float)SourceTime();
     }
 }

@@ -31,6 +31,7 @@ public class ScoreManager : MonoBehaviour
     void Start()
     {
         scoreManager = this;
+        enabled = true;
 
         combo = 1;
         score = 0;
@@ -105,6 +106,7 @@ public class ScoreManager : MonoBehaviour
         if (playerHealth <= 0)
         {
             FindObjectOfType<GameManager>().FailedLevel();
+            enabled = false;
         }
     }
     public void GetResults(bool levelStatus)

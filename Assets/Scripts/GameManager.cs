@@ -8,8 +8,16 @@ public class GameManager : MonoBehaviour
     public GameObject levelSelectMenu;
     public GameObject mainMenuUI;
     public bool paused;
-    public bool levelStatus = false;
+    static ScoreManager scoreManager;
+    static TrackManager trackManager;
+    static bool levelStatus = false;
 
+    void Start()
+    {
+        gameManager = this;
+        scoreManager = FindObjectOfType<ScoreManager>();
+        trackManager = FindObjectOfType<TrackManager>();
+    }
     public void LoadMenu()
     {
         SceneManager.LoadScene(0);
@@ -20,35 +28,30 @@ public class GameManager : MonoBehaviour
     }
     public void RestartLevel()
     {
+        Time.timeScale = 1f;
         paused = false;
-        // FindObjectOfType<Columns>().enabled = true;
-        // FindObjectOfType<ScoreManager>().enabled = true;
         levelCompleteUI.SetActive(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     public void LoadLevel1Scene()
     {
+        Time.timeScale = 1f;
         paused = false;
-        // FindObjectOfType<Columns>().enabled = true;
-        // FindObjectOfType<ScoreManager>().enabled = true;
         SceneManager.LoadScene(2);
     }
     public void FailedLevel()
     {
+        Time.timeScale = 0f;
         paused = true;
-        FindObjectOfType<ScoreManager>().GetResults(levelStatus);
-        FindObjectOfType<TrackManager>().audioSource.Stop();
-        // FindObjectOfType<Columns>().enabled = false;
-        // FindObjectOfType<ScoreManager>().enabled = false;
+        scoreManager.GetResults(levelStatus);
+        trackManager.audioSource.Stop();
         levelCompleteUI.SetActive(true);
     }
     public void CompleteLevel()
     {
         paused = true;
         levelStatus = true;
-        FindObjectOfType<ScoreManager>().GetResults(levelStatus);
-        // FindObjectOfType<Columns>().enabled = false;
-        // FindObjectOfType<ScoreManager>().enabled = false;
+        scoreManager.GetResults(levelStatus);
         levelCompleteUI.SetActive(true);
     }
 }

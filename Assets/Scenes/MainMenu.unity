@@ -428,7 +428,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1123677029}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: LoadLevel1Scene
+        m_MethodName: LoadLevelSelect
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -586,7 +586,6 @@ MonoBehaviour:
   levelSelectMenu: {fileID: 0}
   mainMenuUI: {fileID: 764604686}
   paused: 0
-  levelStatus: 0
 --- !u!4 &1123677030
 Transform:
   m_ObjectHideFlags: 0

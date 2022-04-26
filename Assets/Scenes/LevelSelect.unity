@@ -1075,5 +1075,8 @@ MonoBehaviour:
   levelCompleteUI: {fileID: 0}
   levelSelectMenu: {fileID: 1288793436}
   mainMenuUI: {fileID: 0}
+  columns: {fileID: 0}
+  scoreManager: {fileID: 0}
+  trackManager: {fileID: 0}
   paused: 0
   levelStatus: 0

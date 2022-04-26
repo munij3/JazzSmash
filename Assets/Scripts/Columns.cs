@@ -27,9 +27,10 @@ public class Columns : MonoBehaviour
     void Start()
     {
         columns = this;
-        gameManager = GameObject.FindGameObjectWithTag("gameManager").GetComponent<GameManager>();
-        scoreManager = GameObject.FindGameObjectWithTag("scoreManager").GetComponent<ScoreManager>();
-        trackManager = GameObject.FindGameObjectWithTag("trackManager").GetComponent<TrackManager>();
+        enabled = true;
+        gameManager = FindObjectOfType<GameManager>();
+        scoreManager = FindObjectOfType<ScoreManager>();
+        trackManager = FindObjectOfType<TrackManager>();
     }
 
     public void SetTimeStamps(Melanchall.DryWetMidi.Interaction.Note[] array)
@@ -81,7 +82,7 @@ public class Columns : MonoBehaviour
                         /* Hit within the perfect margin */
                         scoreManager.Perfect(absHitTime - timeStamp);
                         Destroy(enemies[input_i].gameObject);
-                        print($"Perfect! hit enemy {input_i} with a {Math.Round(absHitTime, 2)} second margin");
+                        Debug.Log($"Perfect! +({Math.Round(absHitTime, 2)})");
                         var message = Instantiate(perfectPrefab, transform.position + offset, Quaternion.identity);
                         amountOfNotesHit++;
                         input_i++;
@@ -90,7 +91,7 @@ public class Columns : MonoBehaviour
                     {
                         /* Hit within the good margin */
                         scoreManager.Good(absHitTime - timeStamp);
-                        print($"Good! hit enemy {input_i} with a {Math.Round(absHitTime, 2)} second margin");
+                        Debug.Log($"Good! +({Math.Round(absHitTime, 2)})");
                         var message = Instantiate(goodPrefab, transform.position + offset, Quaternion.identity);
                         Destroy(enemies[input_i].gameObject);
                         amountOfNotesHit++;
@@ -106,16 +107,17 @@ public class Columns : MonoBehaviour
                 {
                     /* If the current time in the song is greater than the timestamp conbined with the margin of error, then the player has missed */
                     scoreManager.Miss();
-                    print($"Missed enemy {input_i}");
+                    Debug.Log($"Missed!");
                     var message = Instantiate(missPrefab, transform.position + offset, Quaternion.identity);
                     input_i++;
                 }
             }
 
             /* Checks if song length has been reached */
-            if(trackManager.currentSongTime >= trackManager.audioSource.clip.length)
+            if((float)trackManager.currentSongTime == trackManager.audioSourceDuration)
             {
                 gameManager.CompleteLevel();
+                enabled = false;
             }
         }
     }
