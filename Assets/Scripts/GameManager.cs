@@ -21,12 +21,16 @@ public class GameManager : MonoBehaviour
     public void RestartLevel()
     {
         paused = false;
+        // FindObjectOfType<Columns>().enabled = true;
+        // FindObjectOfType<ScoreManager>().enabled = true;
         levelCompleteUI.SetActive(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     public void LoadLevel1Scene()
     {
         paused = false;
+        // FindObjectOfType<Columns>().enabled = true;
+        // FindObjectOfType<ScoreManager>().enabled = true;
         SceneManager.LoadScene(2);
     }
     public void FailedLevel()
@@ -34,8 +38,8 @@ public class GameManager : MonoBehaviour
         paused = true;
         FindObjectOfType<ScoreManager>().GetResults(levelStatus);
         FindObjectOfType<TrackManager>().audioSource.Stop();
-        FindObjectOfType<Columns>().enabled = false;
-        FindObjectOfType<ScoreManager>().enabled = false;
+        // FindObjectOfType<Columns>().enabled = false;
+        // FindObjectOfType<ScoreManager>().enabled = false;
         levelCompleteUI.SetActive(true);
     }
     public void CompleteLevel()
@@ -43,8 +47,8 @@ public class GameManager : MonoBehaviour
         paused = true;
         levelStatus = true;
         FindObjectOfType<ScoreManager>().GetResults(levelStatus);
-        FindObjectOfType<Columns>().enabled = false;
-        FindObjectOfType<ScoreManager>().enabled = false;
+        // FindObjectOfType<Columns>().enabled = false;
+        // FindObjectOfType<ScoreManager>().enabled = false;
         levelCompleteUI.SetActive(true);
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -53,7 +52,7 @@ public class Columns : MonoBehaviour
         if(spawn_i < timeStamps.Count)
         {
             /* Check wether notes have to be spawned by evaluating if song duration is greater or equal than the timestamp spawning time minus the time the note is on screen. The note time on screen represents the time before the player attacks enemies. */
-            if(TrackManager.sourceTime() >= timeStamps[spawn_i] - TrackManager.trackManager.noteTimeOnScreen)
+            if(TrackManager.SourceTime() >= timeStamps[spawn_i] - TrackManager.trackManager.noteTimeOnScreen)
             {
                 var enemy = Instantiate(enemyPrefab, transform); // Instantiate enemy prefab and its transform
                 enemies.Add(enemy.GetComponent<Enemy>()); // Add note to the list of instantiated enemies
@@ -70,7 +69,7 @@ public class Columns : MonoBehaviour
                 double timeStamp = timeStamps[input_i]; // Enemy time stamp
                 double perfectMargin = TrackManager.trackManager.perfectMargin; // Perfect margin
                 double goodMargin = TrackManager.trackManager.goodMargin; // Good margin
-                double audioTime = TrackManager.sourceTime() - (TrackManager.trackManager.inputDelay / 1000.0); // Current song time that accounts for given delay in seconds
+                double audioTime = TrackManager.SourceTime() - (TrackManager.trackManager.inputDelay / 1000.0); // Current song time that accounts for given delay in seconds
 
                 if(Input.GetKeyDown(input))
                 {
@@ -113,8 +112,8 @@ public class Columns : MonoBehaviour
                 }
             }
 
-            /* Checks if  */
-            if()
+            /* Checks if song length has been reached */
+            if(trackManager.currentSongTime >= trackManager.audioSource.clip.length)
             {
                 gameManager.CompleteLevel();
             }

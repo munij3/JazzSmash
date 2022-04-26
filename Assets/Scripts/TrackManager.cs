@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // Plugin frameworks to parse the midi file
@@ -16,11 +14,11 @@ public class TrackManager : MonoBehaviour
     public int inputDelay; // delay in milioseconds for keyboard inputs
     public double perfectMargin; // Maximum time margin in seconds for a perfect note
     public double goodMargin; // Maximum time margin in seconds for a good note
-    public float songDelayInSeconds;
+    public float songDelayInSeconds; // Song start delay
     public float noteTimeOnScreen; // Note duration on screen in seconds
     public float noteSpawnPos; // Note spawn Y position 
     public float noteAttackPos; // Note attack Y position 
-    public double songLength;
+    public double currentSongTime;
 
     public float noteDespawnPos 
     {
@@ -33,35 +31,31 @@ public class TrackManager : MonoBehaviour
     void Start()
     {
         trackManager = this;
+
         midiFile = MidiFile.Read(Application.streamingAssetsPath  + "/" + midiName);
-         /* Obtain notes and a count of notes from the midi file, then copy them to an array and set timestamps for each column */
+
+        /* Obtain notes and a count of notes from the midi file, then copy them to an array and set timestamps for each column */
         var notes = midiFile.GetNotes();
         var array = new Melanchall.DryWetMidi.Interaction.Note[notes.Count];
         notes.CopyTo(array, 0);
 
-        // Set time stams for each column
-        foreach (var column in columns) column.SetTimeStamps(array);
+        // Debug.Log("Audio clip length : " + audioSource.clip.length);
 
-        // Obtain total song length
-        foreach (var column in columns)
-        {
-            foreach (var timeStamp in column.timeStamps)
-            {
-                songLength += timeStamp;
-            }
-        }
+        foreach (var column in columns) column.SetTimeStamps(array); // Set time stams for each column
 
-        // Invoke StartSong or audio source after a delay
-        Invoke(nameof(StartSong), songDelayInSeconds);
+        Invoke(nameof(StartSong), songDelayInSeconds); // Invoke StartSong or audio source after a delay
     }
     public void StartSong()
     {
         audioSource.Play();
     }
-    public static double sourceTime()
+    public static double SourceTime()
     {
         // Divides source samples by the frequency of the song to obtain the time
         return (double)trackManager.audioSource.timeSamples / trackManager.audioSource.clip.frequency;
     }
-    void Update(){}
+    void Update()
+    {
+        currentSongTime = SourceTime();
+    }
 }

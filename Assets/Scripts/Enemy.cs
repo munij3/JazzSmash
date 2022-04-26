@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -9,14 +7,14 @@ public class Enemy : MonoBehaviour
     
     void Start()
     {
-        instanceTime = TrackManager.sourceTime();
+        instanceTime = TrackManager.SourceTime();
     }
 
     // Update is called once per frame
     void Update()
     {
         // Calculated elapsed time for note placement
-        double elapsedTimeFromInstance = TrackManager.sourceTime() - instanceTime;
+        double elapsedTimeFromInstance = TrackManager.SourceTime() - instanceTime;
         // Divide elapsed time with the time between both spawn and attack times
         float t = (float)(elapsedTimeFromInstance / (TrackManager.trackManager.noteTimeOnScreen * 2));
 
