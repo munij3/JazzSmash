@@ -1,5 +1,3 @@
-using System.Linq;
-using System.Collections.Generic;
 using UnityEngine;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
