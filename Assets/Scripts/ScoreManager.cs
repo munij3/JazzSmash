@@ -1,15 +1,13 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager scoreManager; // score manager instance for public access
-    public AudioSource missEffect;
-    public TrackManager trackManager;
+    // public AudioSource missEffect;
     // public AudioSource goodEffect;
     // public AudioSource perfectEffect;
     public TMP_Text scoreText;
@@ -19,12 +17,16 @@ public class ScoreManager : MonoBehaviour
     public TMP_Text finalScoreText;
     public TMP_Text notesHitText;
     public TMP_Text statusText;
-    static double totalErrorMargin;
+    public int totalHitCount; // Keeps track of the number of good or perfect hits
+    public int totalMissCount; // Keeps track of the number of good or perfect hits
+    public int perfectHitCount;
+    public int goodHitCount;
+    static double totalErrorMargin; // Keeps track of the sum of the error margins for each enemy hit
     static double accuracy;
     static int combo;
     static int score;
-    static int perfectHitCount;
-    static int goodHitCount;
+    static int perfectTracker;
+    static int goodTracker;
     static int playerHealth;
     static int timeStampCount;
 
@@ -35,9 +37,11 @@ public class ScoreManager : MonoBehaviour
 
         combo = 1;
         score = 0;
+        totalHitCount = 0;
+        totalMissCount = 0;
         accuracy = 0;
-        perfectHitCount = 0;
-        goodHitCount = 0;
+        perfectTracker = 0;
+        goodTracker = 0;
         totalErrorMargin = 0;
         playerHealth = 10;
 
@@ -48,15 +52,17 @@ public class ScoreManager : MonoBehaviour
 
     public void Good(double margin)
     {
-        totalErrorMargin += margin;
-        perfectHitCount = 0;
+        totalHitCount++;
         goodHitCount++;
+        totalErrorMargin += margin;
+        perfectTracker = 0;
+        goodTracker++;
         if(playerHealth < 20)
         {
             playerHealth++;
         }
         StartCoroutine(HealthPulsation(playerHealth));
-        if(goodHitCount == 16)
+        if(goodTracker == 16)
         {
             combo++;
         }
@@ -67,14 +73,16 @@ public class ScoreManager : MonoBehaviour
     }
     public void Perfect(double margin)
     {
-        totalErrorMargin += margin;
+        totalHitCount++;
         perfectHitCount++;
+        totalErrorMargin += margin;
+        perfectTracker++;
         if(playerHealth < 20)
         {
             playerHealth++;
             StartCoroutine(HealthPulsation(playerHealth));
         }
-        if(perfectHitCount == 8)
+        if(perfectTracker == 8)
         {
             combo++;
         }
@@ -85,15 +93,18 @@ public class ScoreManager : MonoBehaviour
     }
     public void Miss()
     {
-        totalErrorMargin += TrackManager.trackManager.goodMargin;
-        perfectHitCount = 0;
-        goodHitCount = 0;
+        //totalErrorMargin += TrackManager.trackManager.goodMargin;
+        perfectTracker = 0;
+        goodTracker = 0;
         playerHealth -= 2;
         StartCoroutine(HealthPulsation(playerHealth));
-        combo = 1;
-        StartCoroutine(ComboPulsation(combo));
-        score -= 15;
-        StartCoroutine(ScorePulsation(score));
+        if (score != 0)
+        {
+            combo = 1;
+            StartCoroutine(ComboPulsation(combo));
+            score -= 15;
+            StartCoroutine(ScorePulsation(score));
+        }
         // scoreManager.missEffect.Play();
     }
     void Update()
@@ -112,18 +123,7 @@ public class ScoreManager : MonoBehaviour
     public void GetResults(bool levelStatus)
     {
         timeStampCount = TrackManager.midiFile.GetNotes().Count;
-        // for (var i = 0; i < TrackManager.trackManager.columns.Length; i++) 
-        // {
-        //     timeStampCount += TrackManager.trackManager.columns[i].timeStamps.Count;
-        // }
-        if (FindObjectOfType<Columns>().amountOfNotesHit == 0)
-        {
-            accuracy = 0;
-        }
-        else
-        {
-            accuracy = CalculateAccuracy(timeStampCount);
-        }
+
         if (levelStatus == true)
         {
             statusText.text = "Complete!";
@@ -132,29 +132,37 @@ public class ScoreManager : MonoBehaviour
         {
             statusText.text = "You failed!";
         }
-        /* Calculate parameters regardless of level status set in GameManager */
-        finalScoreText.text = $"Total score: {score}";
-        accuracyText.text = $"Overal accuracy: {accuracy}%";
-        notesHitText.text = $"Notes hit: {FindObjectOfType<Columns>().amountOfNotesHit}/{timeStampCount}";
-    }
-    public double CalculateAccuracy(int timeStampCount)
-    {
-        double acceptedPerfectAccuracy = timeStampCount * FindObjectOfType<TrackManager>().perfectMargin; // Amount of possible perfect margins
-        double acceptedGoodAccuracy = timeStampCount * FindObjectOfType<TrackManager>().goodMargin; // Amount of possible good margins
-        double marginRange = acceptedGoodAccuracy - acceptedPerfectAccuracy; // Margin range between accepted margins
-
-        if (totalErrorMargin <= acceptedPerfectAccuracy)
+        if (totalHitCount == 0)
         {
-            return accuracy = 100;
+            accuracy = 0;
         }
         else
         {
-            return accuracy = (totalErrorMargin * 100) / marginRange;
+            accuracy = Math.Round(CalculateAccuracy(), 2);
+        }
+        /* Calculate parameters regardless of level status set in GameManager */
+        finalScoreText.text = $"Total score: {score}";
+        accuracyText.text = $"Overal accuracy: {accuracy}%";
+        notesHitText.text = $"Notes hit: {totalHitCount}/{timeStampCount}";
+    }
+    public double CalculateAccuracy()
+    {
+        double acceptedPerfectAccuracy = totalHitCount * FindObjectOfType<TrackManager>().perfectMargin; // Amount of possible perfect margins(
+        double acceptedGoodAccuracy = totalHitCount * FindObjectOfType<TrackManager>().goodMargin; // Amount of possible good margins
+        double marginRange = acceptedGoodAccuracy - acceptedPerfectAccuracy; // Margin range between accepted margins
+        /* If the player accuracy ends up being less than the perfect margin, then an accuracy of 100% will be returned. Else, the player accuracy is calculated with a rule of three. */
+        Debug.Log($"{totalErrorMargin}");
+        if (totalErrorMargin < perfectHitCount)
+        {
+            return 100;
+        }
+        else
+        {
+            return (totalErrorMargin * 100) / marginRange;
         }
     }
 
     /* TEXT COROUTINES */
-
     private static IEnumerator ScorePulsation(int givenScore)
     {
         /* Co-routine for score pulsation when updated */

@@ -403,7 +403,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelCompleteUI: {fileID: 1980822910}
-  levelFailedUI: {fileID: 0}
   levelSelectMenu: {fileID: 0}
   mainMenuUI: {fileID: 0}
   paused: 0
@@ -415,7 +414,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 408389671}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 332.19275, y: 881.0225, z: -17.607222}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -589,10 +588,6 @@ MonoBehaviour:
   perfectPrefab: {fileID: 4090848258105182254, guid: 5dc6097a403644fb495fb03d8a393bd0, type: 3}
   missPrefab: {fileID: 1311101159373004743, guid: 54b29135a42294704b93d262052deeb2, type: 3}
   timeStamps: []
-  timeStamp: 0
-  audioTime: 0
-  sourceTime: 0
-  amountOfNotesHit: 0
 --- !u!4 &434437908
 Transform:
   m_ObjectHideFlags: 0
@@ -1364,8 +1359,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56525211fb3a74de7b6017d1e6e47dc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  missEffect: {fileID: 420735992}
-  trackManager: {fileID: 0}
   scoreText: {fileID: 723569099}
   comboText: {fileID: 1594940999}
   healthText: {fileID: 1659881053}
@@ -1373,6 +1366,8 @@ MonoBehaviour:
   finalScoreText: {fileID: 1238059972}
   notesHitText: {fileID: 1057846020}
   statusText: {fileID: 804820219}
+  totalHitCount: 0
+  totalMissCount: 0
 --- !u!4 &1022766028
 Transform:
   m_ObjectHideFlags: 0
@@ -1826,10 +1821,6 @@ MonoBehaviour:
   perfectPrefab: {fileID: 4090848258105182254, guid: 5dc6097a403644fb495fb03d8a393bd0, type: 3}
   missPrefab: {fileID: 1311101159373004743, guid: 54b29135a42294704b93d262052deeb2, type: 3}
   timeStamps: []
-  timeStamp: 0
-  audioTime: 0
-  sourceTime: 0
-  amountOfNotesHit: 0
 --- !u!4 &1248694219
 Transform:
   m_ObjectHideFlags: 0
@@ -1884,10 +1875,6 @@ MonoBehaviour:
   perfectPrefab: {fileID: 4090848258105182254, guid: 5dc6097a403644fb495fb03d8a393bd0, type: 3}
   missPrefab: {fileID: 1311101159373004743, guid: 54b29135a42294704b93d262052deeb2, type: 3}
   timeStamps: []
-  timeStamp: 0
-  audioTime: 0
-  sourceTime: 0
-  amountOfNotesHit: 0
 --- !u!4 &1508669395
 Transform:
   m_ObjectHideFlags: 0
@@ -1942,10 +1929,6 @@ MonoBehaviour:
   perfectPrefab: {fileID: 4090848258105182254, guid: 5dc6097a403644fb495fb03d8a393bd0, type: 3}
   missPrefab: {fileID: 1311101159373004743, guid: 54b29135a42294704b93d262052deeb2, type: 3}
   timeStamps: []
-  timeStamp: 0
-  audioTime: 0
-  sourceTime: 0
-  amountOfNotesHit: 0
 --- !u!4 &1524820962
 Transform:
   m_ObjectHideFlags: 0
@@ -2559,9 +2542,11 @@ MonoBehaviour:
   - {fileID: 1508669394}
   midiName: level_1.mid
   inputDelay: 0
-  perfectMargin: 0.08
-  goodMargin: 0.16
+  perfectMargin: 0.05
+  goodMargin: 0.1
   songDelayInSeconds: 0
+  currentSongTime: 0
+  audioSourceDuration: 0
   noteTimeOnScreen: 2
   noteSpawnPos: 20
   noteAttackPos: -5
@@ -2619,10 +2604,6 @@ MonoBehaviour:
   perfectPrefab: {fileID: 4090848258105182254, guid: 5dc6097a403644fb495fb03d8a393bd0, type: 3}
   missPrefab: {fileID: 1311101159373004743, guid: 54b29135a42294704b93d262052deeb2, type: 3}
   timeStamps: []
-  timeStamp: 0
-  audioTime: 0
-  sourceTime: 0
-  amountOfNotesHit: 0
 --- !u!4 &1787777544
 Transform:
   m_ObjectHideFlags: 0
@@ -2812,10 +2793,6 @@ MonoBehaviour:
   perfectPrefab: {fileID: 4090848258105182254, guid: 5dc6097a403644fb495fb03d8a393bd0, type: 3}
   missPrefab: {fileID: 1311101159373004743, guid: 54b29135a42294704b93d262052deeb2, type: 3}
   timeStamps: []
-  timeStamp: 0
-  audioTime: 0
-  sourceTime: 0
-  amountOfNotesHit: 0
 --- !u!4 &1880521334
 Transform:
   m_ObjectHideFlags: 0
@@ -2870,10 +2847,6 @@ MonoBehaviour:
   perfectPrefab: {fileID: 4090848258105182254, guid: 5dc6097a403644fb495fb03d8a393bd0, type: 3}
   missPrefab: {fileID: 1311101159373004743, guid: 54b29135a42294704b93d262052deeb2, type: 3}
   timeStamps: []
-  timeStamp: 0
-  audioTime: 0
-  sourceTime: 0
-  amountOfNotesHit: 0
 --- !u!4 &1887775993
 Transform:
   m_ObjectHideFlags: 0

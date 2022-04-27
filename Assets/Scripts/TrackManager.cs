@@ -1,6 +1,6 @@
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
-
-// Plugin frameworks to parse the midi file
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 
@@ -15,11 +15,11 @@ public class TrackManager : MonoBehaviour
     public double perfectMargin; // Maximum time margin in seconds for a perfect note
     public double goodMargin; // Maximum time margin in seconds for a good note
     public float songDelayInSeconds; // Song start delay
+    public float currentSongTime; // Current audio source time when calling the SourceTime function
+    public float audioSourceDuration; // Duration of the provided audio source
     public float noteTimeOnScreen; // Note duration on screen in seconds
     public float noteSpawnPos; // Note spawn Y position
     public float noteAttackPos; // Note attack Y position
-    public float currentSongTime; // Current audio source time when calling the SourceTime function
-    public float audioSourceDuration; // Duration of the provided audio source
     public float noteDespawnPos 
     {
         get 
@@ -59,5 +59,11 @@ public class TrackManager : MonoBehaviour
     void Update()
     {
         currentSongTime = (float)SourceTime();
+
+        /* If the song duration has been elapsed, then the player has completed the level */
+        if ((float)currentSongTime == audioSourceDuration)
+        {
+            FindObjectOfType<GameManager>().CompleteLevel();
+        }
     }
 }
