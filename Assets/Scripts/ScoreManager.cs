@@ -147,19 +147,9 @@ public class ScoreManager : MonoBehaviour
     }
     public double CalculateAccuracy()
     {
-        double acceptedPerfectAccuracy = totalHitCount * FindObjectOfType<TrackManager>().perfectMargin; // Amount of possible perfect margins(
-        double acceptedGoodAccuracy = totalHitCount * FindObjectOfType<TrackManager>().goodMargin; // Amount of possible good margins
-        double marginRange = acceptedGoodAccuracy - acceptedPerfectAccuracy; // Margin range between accepted margins
-        /* If the player accuracy ends up being less than the perfect margin, then an accuracy of 100% will be returned. Else, the player accuracy is calculated with a rule of three. */
-        Debug.Log($"{totalErrorMargin}");
-        if (totalErrorMargin < perfectHitCount)
-        {
-            return 100;
-        }
-        else
-        {
-            return (totalErrorMargin * 100) / marginRange;
-        }
+        double maxMarginRange = totalHitCount * FindObjectOfType<TrackManager>().goodMargin; // Margin range between 0 and the maximum accepted range of the combined ammount of successful user inputs
+        Debug.Log($"{totalErrorMargin} {maxMarginRange}");
+        return ((maxMarginRange - totalErrorMargin) * 100) / maxMarginRange;
     }
 
     /* TEXT COROUTINES */
