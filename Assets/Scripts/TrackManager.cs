@@ -7,6 +7,7 @@ public class TrackManager : MonoBehaviour
     public static TrackManager trackManager; // track manager instance for public access
     public static MidiFile midiFile; // Location on memory where the midi file will load
     public AudioSource audioSource; // Selected level track
+    public GameManager gameManager;
     public Columns[] columns; // Columns for each set of recorded midi keys
     public string midiName; // Streams midi file from the MidiFiles folder 
     public int inputDelay; // delay in milioseconds for keyboard inputs
@@ -29,6 +30,8 @@ public class TrackManager : MonoBehaviour
     void Start()
     {
         trackManager = this;
+
+        gameManager = FindObjectOfType<GameManager>();
 
         midiFile = MidiFile.Read(Application.streamingAssetsPath  + "/" + midiName);
 
@@ -61,7 +64,15 @@ public class TrackManager : MonoBehaviour
         /* If the song duration has been elapsed, then the player has completed the level */
         if ((float)currentSongTime == audioSourceDuration)
         {
-            FindObjectOfType<GameManager>().CompleteLevel();
+            gameManager.CompleteLevel();
+        }
+        if (gameManager.paused == true)
+        {
+            AudioListener.paused = true;
+        }
+        else
+        {
+            AudioListener.paused  = false;
         }
     }
 }

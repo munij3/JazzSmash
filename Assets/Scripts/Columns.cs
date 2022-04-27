@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Melanchall.DryWetMidi.Interaction;
+using UnityEngine.UI;
 
 public class Columns : MonoBehaviour
 {
@@ -65,6 +66,8 @@ public class Columns : MonoBehaviour
 
         if (gameManager.paused == false) 
         {
+            enabled = true;
+
             if (input_i < timeStamps.Count)
             {
                 /* Will run while the amount of inputs is lower then the amount of timestamps */
