@@ -66,13 +66,5 @@ public class TrackManager : MonoBehaviour
         {
             gameManager.CompleteLevel();
         }
-        if (gameManager.paused == true)
-        {
-            AudioListener.paused = true;
-        }
-        else
-        {
-            AudioListener.paused  = false;
-        }
     }
 }

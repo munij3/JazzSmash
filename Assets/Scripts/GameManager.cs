@@ -11,7 +11,8 @@ public class GameManager : MonoBehaviour
     public GameObject mainMenuUI;
     public GameObject PauseMenuUI;
     public Columns[] columns;
-    public bool paused;
+    public bool pausedGame;
+    public static bool pause;
     static ScoreManager scoreManager;
     static TrackManager trackManager;
     static bool levelStatus = false;
@@ -19,26 +20,26 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         gameManager = this;
-        paused = false;
+        pausedGame = false;
         scoreManager = FindObjectOfType<ScoreManager>();
         trackManager = FindObjectOfType<TrackManager>();
     }
     public void SetPause()
     {
-        if (paused == false)
+        if (pausedGame == false)
         {
-            paused = true;
+            pausedGame = true;
             PauseMenuUI.SetActive(true);
             Time.timeScale = 0f;
-            // AudioListener.paused = true;
+            AudioListener.pause = true;
             foreach (var column in columns) column.enabled = false;
         }
         else
         {
-            paused = false;
+            pausedGame = false;
             PauseMenuUI.SetActive(false);
             Time.timeScale = 1f;
-            // AudioListener.paused = false;
+            AudioListener.pause = false;
             foreach (var column in columns) column.enabled = true;
         }
     }
@@ -53,27 +54,27 @@ public class GameManager : MonoBehaviour
     public void RestartLevel()
     {
         Time.timeScale = 1f;
-        paused = false;
+        pausedGame = false;
         levelCompleteUI.SetActive(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     public void LoadLevel1Scene()
     {
         Time.timeScale = 1f;
-        paused = false;
+        pausedGame = false;
         SceneManager.LoadScene(2);
     }
     public void FailedLevel()
     {
         Time.timeScale = 0f;
-        paused = true;
+        pausedGame = true;
         scoreManager.GetResults(levelStatus);
         trackManager.audioSource.Stop();
         levelCompleteUI.SetActive(true);
     }
     public void CompleteLevel()
     {
-        paused = true;
+        pausedGame = true;
         levelStatus = true;
         scoreManager.GetResults(levelStatus);
         levelCompleteUI.SetActive(true);

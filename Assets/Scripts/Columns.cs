@@ -64,7 +64,7 @@ public class Columns : MonoBehaviour
             }
         }
 
-        if (gameManager.paused == false) 
+        if (gameManager.pausedGame == false) 
         {
             enabled = true;
 
@@ -106,7 +106,7 @@ public class Columns : MonoBehaviour
                 }
                 if (timeStamp + goodMargin  < audioTime)
                 {
-                    /* If the current time in the song is greater than the timestamp conbined with the margin of error, then the player has missed */
+                    /* If the current time in the song is greater than the timestamp combined with the margin of error, then the player has missed */
                     Debug.Log($"Missed!");
                     scoreManager.Miss();
                     var message = Instantiate(missPrefab, transform.position + offset, Quaternion.identity);
