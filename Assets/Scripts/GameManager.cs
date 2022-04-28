@@ -64,6 +64,10 @@ public class GameManager : MonoBehaviour
         pausedGame = false;
         SceneManager.LoadScene(2);
     }
+    public void LoadUserInputScene()
+    {
+        SceneManager.LoadScene(3);
+    }
     public void FailedLevel()
     {
         Time.timeScale = 0f;

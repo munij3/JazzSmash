@@ -16,16 +16,19 @@ using UnityEngine.Networking;
 [System.Serializable]
 public class User_data
 {
-    public int user_id;
+    // public int user_id;
     public string user_name;
     public string country;
 }
 [System.Serializable]
 public class Attempts
 {
-    public int user_id;
-    public string name;
-    public string surname;
+    // public int user_id;
+    public string level_att;
+    public int score;
+    public double accuracy;
+    public int time_elapsed;
+    public int result;
 }
 [System.Serializable]
 public class Level_data_user
@@ -48,84 +51,66 @@ public class Music_data
 }
 
 // Allow the class to be extracted from Unity
-[System.Serializable]
-public class User_data_list
-{
-    public List<User_data> userData;
-}
-[System.Serializable]
-public class Attempts_list
-{
-    public List<Attempts> attempts;
-}
-[System.Serializable]
-public class Level_data_user_list
-{
-    public List<Level_data_user> levelDataUser;
-}
-[System.Serializable]
-public class Music_data_list
-{
-    public List<Music_data> musicData;
-}
+// [System.Serializable]
+// public class User_data_list
+// {
+//     public List<User_data> userData;
+// }
+
 
 public class APITest : MonoBehaviour
 {
     [SerializeField] string url;
+    // API routes
     [SerializeField] string getUsersEP;
 
     // This is where the information from the api will be extracted
-    public User_data_list allUserData;
-    public Attempts_list allAttemptsData;
-    public Level_data_user_list allLevelData;
-    public Music_data_list allMusicData;
+    // public User_data_list allUserData;
 
     // Update is called once per frame
-    void Update()
+    void Update(){}
+
+    public void AddUserMethod(string input_name, string input_country)
     {
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            StartCoroutine(GetUsers());
-        }
-        if (Input.GetKeyDown(KeyCode.N)) {
-            StartCoroutine(AddUser());
-        }
+        StartCoroutine(AddUser(input_name, input_country));
     }
 
-    IEnumerator GetUsers()
+    public void AddAttemptMethod(string level_attempted, int obtained_score, double obtained_accuracy, int elapsed_time, int obtained_result)
     {
-        UnityWebRequest www = UnityWebRequest.Get(url + getUsersEP);
-        yield return www.SendWebRequest();
-
-        if (www.result == UnityWebRequest.Result.Success) {
-            //Debug.Log("Response: " + www.downloadHandler.text);
-            // Compose the response to look like the object we want to extract
-            // https://answers.unity.com/questions/1503047/json-must-represent-an-object-type.html
-            string jsonString = "{\"users\":" + www.downloadHandler.text + "}";
-            allUserData = JsonUtility.FromJson<User_data_list>(jsonString);
-            // DisplayUsers();
-        } else {
-            Debug.Log("Error: " + www.error);
-        }
+        StartCoroutine(AddAttempt(level_attempted, obtained_score, obtained_accuracy, elapsed_time, obtained_result));
     }
 
-    IEnumerator AddUser()
+    // CHECAR COMO OBTENER USUARIO PARA VERIFICAR SI YA EXISTE EN LA DATABASE
+
+    // IEnumerator GetUsers()
+    // {
+    //     UnityWebRequest www = UnityWebRequest.Get(url + getUsersEP);
+    //     yield return www.SendWebRequest();
+
+    //     if (www.result == UnityWebRequest.Result.Success) {
+    //         //Debug.Log("Response: " + www.downloadHandler.text);
+    //         // Compose the response to look like the object we want to extract
+    //         // https://answers.unity.com/questions/1503047/json-must-represent-an-object-type.html
+    //         string jsonString = "{\"users\":" + www.downloadHandler.text + "}";
+    //         allUserData = JsonUtility.FromJson<User_data_list>(jsonString);
+    //         // DisplayUsers();
+    //     } else {
+    //         Debug.Log("Error: " + www.error);
+    //     }
+    // }
+
+    IEnumerator AddUser(string input_name, string input_country)
     {
-        /*
-        // This should work with an API that does not expect JSON
-        WWWForm form = new WWWForm();
-        form.AddField("name", "newGuy" + Random.Range(1000, 9000).ToString());
-        form.AddField("surname", "Tester" + Random.Range(1000, 9000).ToString());
-        Debug.Log(form);
-        */
 
         // Create the object to be sent as json
-        User_data testUser = new User_data();
-        testUser.user_name = "newGuy" + Random.Range(1000, 9000).ToString();
-        testUser.country = "Mexico";
-
+        User_data newUser = new User_data();
+        newUser.user_name = input_name;
+        newUser.country = input_country;
         //Debug.Log("USER: " + testUser);
-        string jsonData = JsonUtility.ToJson(testUser);
+
+        string jsonData = JsonUtility.ToJson(newUser);
         //Debug.Log("BODY: " + jsonData);
+
         // Send using the Put method:
         // https://stackoverflow.com/questions/68156230/unitywebrequest-post-not-sending-body
         UnityWebRequest www = UnityWebRequest.Put(url + getUsersEP, jsonData);
@@ -142,9 +127,9 @@ public class APITest : MonoBehaviour
         }
     }
 
-    // void DisplayUsers()
-    // {
-    //     TMPro_Test texter = GetComponent<TMPro_Test>();
-    //     texter.LoadNames(allUserData);
-    // }
+    IEnumerator AddAttempt(string level_attempted, int obtained_score, double obtained_accuracy, int elapsed_time, int obtained_result)
+    {
+        Attempts newAttempt = new Attempts();
+        // newAttempt.level_att = 
+    }
 }

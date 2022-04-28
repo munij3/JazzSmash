@@ -542,7 +542,7 @@ MonoBehaviour:
   mainMenuUI: {fileID: 0}
   PauseMenuUI: {fileID: 976698809}
   columns: []
-  paused: 0
+  pausedGame: 0
 --- !u!4 &408389673
 Transform:
   m_ObjectHideFlags: 0
@@ -1045,7 +1045,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 408389672}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: LoadMenu
+        m_MethodName: LoadLevelSelect
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
