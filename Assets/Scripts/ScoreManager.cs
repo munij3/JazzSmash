@@ -22,9 +22,9 @@ public class ScoreManager : MonoBehaviour
     public int perfectHitCount;
     public int goodHitCount;
     static double totalErrorMargin; // Keeps track of the sum of the error margins for each enemy hit
-    static double accuracy;
-    static int combo;
-    static int score;
+    public double accuracy;
+    public int combo;
+    public int score;
     static int perfectTracker;
     static int goodTracker;
     static int playerHealth;
@@ -163,7 +163,7 @@ public class ScoreManager : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         scoreManager.scoreText.rectTransform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
-        score = givenScore;
+        scoreManager.score = givenScore;
 
         for (float i = 1.2f; i >= 1f; i -= 0.05f)
         {
@@ -182,7 +182,7 @@ public class ScoreManager : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         scoreManager.comboText.rectTransform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
-        accuracy = givenCombo;
+        scoreManager.accuracy = givenCombo;
 
         for (float i = 1.2f; i >= 1f; i -= 0.05f)
         {

@@ -8,7 +8,6 @@ public class UserData : MonoBehaviour
     public InputField nameInputField;
     public InputField countryInputField;
     public APITest apiTest;
-
     void Start()
     {
         APITest apiTest = GetComponent<APITest>();

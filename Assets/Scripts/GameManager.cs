@@ -15,14 +15,17 @@ public class GameManager : MonoBehaviour
     public static bool pause;
     static ScoreManager scoreManager;
     static TrackManager trackManager;
+    public APITest apiTest;
     static bool levelStatus = false;
 
     void Start()
     {
+        
         gameManager = this;
         pausedGame = false;
         scoreManager = FindObjectOfType<ScoreManager>();
         trackManager = FindObjectOfType<TrackManager>();
+        APITest apiTest = GetComponent<APITest>();
     }
     public void SetPause()
     {
@@ -75,6 +78,7 @@ public class GameManager : MonoBehaviour
         scoreManager.GetResults(levelStatus);
         trackManager.audioSource.Stop();
         levelCompleteUI.SetActive(true);
+        apiTest.AddAttemptMethod(FindObjectOfType<AudioSource>().clip.ToString(), scoreManager.score, scoreManager.accuracy, (int)trackManager.currentSongTime, scoreManager.totalHitCount);
     }
     public void CompleteLevel()
     {

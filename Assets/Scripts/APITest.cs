@@ -62,7 +62,8 @@ public class APITest : MonoBehaviour
 {
     [SerializeField] string url;
     // API routes
-    [SerializeField] string getUsersEP;
+    [SerializeField] string putUsersEP;
+    [SerializeField] string putAttemptsEP;
 
     // This is where the information from the api will be extracted
     // public User_data_list allUserData;
@@ -106,15 +107,14 @@ public class APITest : MonoBehaviour
         User_data newUser = new User_data();
         newUser.user_name = input_name;
         newUser.country = input_country;
-        //Debug.Log("USER: " + testUser);
+        Debug.Log("USER: " + newUser);
 
         string jsonData = JsonUtility.ToJson(newUser);
         //Debug.Log("BODY: " + jsonData);
 
         // Send using the Put method:
         // https://stackoverflow.com/questions/68156230/unitywebrequest-post-not-sending-body
-        UnityWebRequest www = UnityWebRequest.Put(url + getUsersEP, jsonData);
-        //UnityWebRequest www = UnityWebRequest.Post(url + getUsersEP, form);
+        UnityWebRequest www = UnityWebRequest.Put(url + putUsersEP, jsonData);
         // Set the method later, and indicate the encoding is JSON
         www.method = "POST";
         www.SetRequestHeader("Content-Type", "application/json");
@@ -130,6 +130,28 @@ public class APITest : MonoBehaviour
     IEnumerator AddAttempt(string level_attempted, int obtained_score, double obtained_accuracy, int elapsed_time, int obtained_result)
     {
         Attempts newAttempt = new Attempts();
-        // newAttempt.level_att = 
+        newAttempt.level_att = level_attempted;
+        newAttempt.score = obtained_score;
+        newAttempt.accuracy = obtained_accuracy;
+        newAttempt.time_elapsed = elapsed_time;
+        newAttempt.result = obtained_result;
+        Debug.Log("ATTEMPT: " + newAttempt);
+
+        string jsonData = JsonUtility.ToJson(newAttempt);
+        //Debug.Log("BODY: " + jsonData);
+
+        // Send using the Put method:
+        // https://stackoverflow.com/questions/68156230/unitywebrequest-post-not-sending-body
+        UnityWebRequest www = UnityWebRequest.Put(url + putAttemptsEP, jsonData);
+        // Set the method later, and indicate the encoding is JSON
+        www.method = "POST";
+        www.SetRequestHeader("Content-Type", "application/json");
+        yield return www.SendWebRequest();
+
+        if (www.result == UnityWebRequest.Result.Success) {
+            Debug.Log("Response: " + www.downloadHandler.text);
+        } else {
+            Debug.Log("Error: " + www.error);
+        }
     }
 }
