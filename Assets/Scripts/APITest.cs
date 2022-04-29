@@ -5,12 +5,13 @@ NOTE: Using Put instead of Post. See the links around line 86
 Gilberto Echeverria
 */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity;
 using UnityEngine;
 using UnityEngine.Networking;
 // using TMPro_Test;
-
 // Allow the class to be extracted from Unity
 // https://stackoverflow.com/questions/40633388/show-members-of-a-class-in-unity3d-inspector
 [System.Serializable]
@@ -30,25 +31,6 @@ public class Attempts
     public int time_elapsed;
     public int result;
 }
-[System.Serializable]
-public class Level_data_user
-{
-    public string level_name;
-    public int user_id;
-    public int lvl_1_highscore;
-    public int lvl_2_highscore;
-    public int lvl_1_rating;
-    public int lvl_2_rating;
-    public int lvl_1_attempts;
-    public int lvl_2_attempts;
-}
-[System.Serializable]
-public class Music_data
-{
-    public string song_name;
-    public int duration;
-    public int note_amount;
-}
 
 // Allow the class to be extracted from Unity
 // [System.Serializable]
@@ -56,7 +38,6 @@ public class Music_data
 // {
 //     public List<User_data> userData;
 // }
-
 
 public class APITest : MonoBehaviour
 {
@@ -108,23 +89,27 @@ public class APITest : MonoBehaviour
         newUser.user_name = input_name;
         newUser.country = input_country;
         Debug.Log("USER: " + newUser);
+        Debug.Log(newUser.user_name);
+        Debug.Log(newUser.country);
 
         string jsonData = JsonUtility.ToJson(newUser);
         //Debug.Log("BODY: " + jsonData);
 
         // Send using the Put method:
         // https://stackoverflow.com/questions/68156230/unitywebrequest-post-not-sending-body
-        UnityWebRequest www = UnityWebRequest.Put(url + putUsersEP, jsonData);
-        // Set the method later, and indicate the encoding is JSON
-        www.method = "POST";
-        www.SetRequestHeader("Content-Type", "application/json");
-        yield return www.SendWebRequest();
+        using(UnityWebRequest www = UnityWebRequest.Put(url + putUsersEP, jsonData))
+        {
+            www.method = "POST";
+            www.SetRequestHeader("Content-Type", "Application/json");
+            yield return www.SendWebRequest();
 
-        if (www.result == UnityWebRequest.Result.Success) {
-            Debug.Log("Response: " + www.downloadHandler.text);
-        } else {
-            Debug.Log("Error: " + www.error);
+            if (www.result == UnityWebRequest.Result.Success) {
+                Debug.Log("Response: " + www.downloadHandler.text);
+            } else {
+                Debug.Log("Error: " + www.error);
+            }
         }
+        // Set the method later, and indicate the encoding is JSON
     }
 
     IEnumerator AddAttempt(string level_attempted, int obtained_score, double obtained_accuracy, int elapsed_time, int obtained_result)

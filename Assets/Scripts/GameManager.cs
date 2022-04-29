@@ -11,21 +11,21 @@ public class GameManager : MonoBehaviour
     public GameObject mainMenuUI;
     public GameObject PauseMenuUI;
     public Columns[] columns;
-    public bool pausedGame;
-    public static bool pause;
     static ScoreManager scoreManager;
     static TrackManager trackManager;
-    public APITest apiTest;
+    public GameObject apiTest;
+    APITest api;
     static bool levelStatus = false;
+    public bool pausedGame;
+    public static bool pause;
 
     void Start()
     {
-        
         gameManager = this;
         pausedGame = false;
         scoreManager = FindObjectOfType<ScoreManager>();
         trackManager = FindObjectOfType<TrackManager>();
-        APITest apiTest = GetComponent<APITest>();
+        api = apiTest.GetComponent<APITest>();
     }
     public void SetPause()
     {
@@ -78,7 +78,8 @@ public class GameManager : MonoBehaviour
         scoreManager.GetResults(levelStatus);
         trackManager.audioSource.Stop();
         levelCompleteUI.SetActive(true);
-        apiTest.AddAttemptMethod(FindObjectOfType<AudioSource>().clip.ToString(), scoreManager.score, scoreManager.accuracy, (int)trackManager.currentSongTime, scoreManager.totalHitCount);
+        
+        api.AddAttemptMethod("test", scoreManager.score, scoreManager.accuracy, (int)trackManager.currentSongTime, scoreManager.totalHitCount);
     }
     public void CompleteLevel()
     {
@@ -86,6 +87,8 @@ public class GameManager : MonoBehaviour
         levelStatus = true;
         scoreManager.GetResults(levelStatus);
         levelCompleteUI.SetActive(true);
+       
+        api.AddAttemptMethod("test", scoreManager.score, scoreManager.accuracy, (int)trackManager.currentSongTime, scoreManager.totalHitCount);
     }
     void Update() 
     {

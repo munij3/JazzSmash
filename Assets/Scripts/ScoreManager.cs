@@ -7,6 +7,7 @@ using Melanchall.DryWetMidi.Interaction;
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager scoreManager; // score manager instance for public access
+    static GameManager gameManager;
     // public AudioSource missEffect;
     // public AudioSource goodEffect;
     // public AudioSource perfectEffect;
@@ -17,12 +18,12 @@ public class ScoreManager : MonoBehaviour
     public TMP_Text finalScoreText;
     public TMP_Text notesHitText;
     public TMP_Text statusText;
+    static double totalErrorMargin; // Keeps track of the sum of the error margins for each enemy hit
+    public double accuracy;
     public int totalHitCount; // Keeps track of the number of good or perfect hits
     public int totalMissCount; // Keeps track of the number of good or perfect hits
     public int perfectHitCount;
     public int goodHitCount;
-    static double totalErrorMargin; // Keeps track of the sum of the error margins for each enemy hit
-    public double accuracy;
     public int combo;
     public int score;
     static int perfectTracker;
@@ -33,6 +34,7 @@ public class ScoreManager : MonoBehaviour
     void Start()
     {
         scoreManager = this;
+        gameManager = FindObjectOfType<GameManager>();
         enabled = true;
 
         combo = 1;
@@ -116,7 +118,7 @@ public class ScoreManager : MonoBehaviour
         /* Checks wether the players health has been depleted in order to display a failed level splash screen, and display obtained scores */
         if (playerHealth <= 0)
         {
-            FindObjectOfType<GameManager>().FailedLevel();
+            gameManager.FailedLevel();
             enabled = false;
         }
     }
