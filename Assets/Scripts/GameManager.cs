@@ -50,9 +50,23 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
-    public void LoadLevelSelect()
+    public void LoadUserInputScene()
     {
         SceneManager.LoadScene(1);
+    }
+    public void LoadCountrySelect()
+    {
+        SceneManager.LoadScene(2);
+    }
+    public void LoadLevelSelect()
+    {
+        SceneManager.LoadScene(3);
+    }
+    public void LoadLevel1Scene()
+    {
+        Time.timeScale = 1f;
+        pausedGame = false;
+        SceneManager.LoadScene(4);
     }
     public void RestartLevel()
     {
@@ -60,16 +74,6 @@ public class GameManager : MonoBehaviour
         pausedGame = false;
         levelCompleteUI.SetActive(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-    public void LoadLevel1Scene()
-    {
-        Time.timeScale = 1f;
-        pausedGame = false;
-        SceneManager.LoadScene(2);
-    }
-    public void LoadUserInputScene()
-    {
-        SceneManager.LoadScene(3);
     }
     public void FailedLevel()
     {
@@ -79,7 +83,7 @@ public class GameManager : MonoBehaviour
         trackManager.audioSource.Stop();
         levelCompleteUI.SetActive(true);
         
-        api.AddAttemptMethod("test", scoreManager.score, scoreManager.accuracy, (int)trackManager.currentSongTime, scoreManager.totalHitCount);
+        api.AddAttemptMethod(trackManager.audioSource.ToString(), scoreManager.score, scoreManager.accuracy, (int)trackManager.currentSongTime, scoreManager.totalHitCount);
     }
     public void CompleteLevel()
     {
@@ -88,7 +92,7 @@ public class GameManager : MonoBehaviour
         scoreManager.GetResults(levelStatus);
         levelCompleteUI.SetActive(true);
        
-        api.AddAttemptMethod("test", scoreManager.score, scoreManager.accuracy, (int)trackManager.currentSongTime, scoreManager.totalHitCount);
+        api.AddAttemptMethod(trackManager.audioSource.ToString(), scoreManager.score, scoreManager.accuracy, (int)trackManager.currentSongTime, scoreManager.totalHitCount);
     }
     void Update() 
     {
