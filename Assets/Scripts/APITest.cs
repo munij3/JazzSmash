@@ -35,20 +35,13 @@ public class Attempts
     public int result;
 }
 
-// Allow the class to be extracted from Unity
-[System.Serializable]
-public class User_data_list
-{
-    public List<User_data> userData;
-}
-
 public class APITest : MonoBehaviour
 {
     [SerializeField] string url;
     // API routes
     [SerializeField] string checkUsersEP;
-    [SerializeField] string putUsersEP;
-    [SerializeField] string putAttemptsEP;
+    [SerializeField] string postUserEP;
+    [SerializeField] string postAttemptEP;
     [SerializeField] string getUserIdEP;
     public User_data user; 
     public GameObject userErrorMessage;
@@ -63,30 +56,30 @@ public class APITest : MonoBehaviour
     }
     public void VerifyUserMethod(string input_name, string input_password)
     {
-        StartCoroutine(Verify_User(input_name, input_password));
+        StartCoroutine(VerifyUser(input_name, input_password));
     }
 
     public void AddAttemptMethod(string level_attempted, int obtained_score, double obtained_accuracy, int elapsed_time, int obtained_result)
     {
         StartCoroutine(AddAttempt(level_attempted, obtained_score, obtained_accuracy, elapsed_time, obtained_result));
     }
-    public int GetUserId(string user_name)
-    {
-        StartCoroutine(GetId(user_name));
-    }
+    // public int GetUserId(string user_name)
+    // {
+    //     StartCoroutine(GetId(user_name));
+    // }
     public class Message
     {
         public string message;
     }
-    Message msg;
+    Message newMessage;
 
     IEnumerator AddUser(string input_name, string input_password, string input_country)
     {   
         User_data user = new User_data();
-        user.user_name=input_name;
-        user.password=input_password;
-        string data=JsonUtility.ToJson(user);
-        using(UnityWebRequest www= UnityWebRequest.Put(url + putUsersEP,data))
+        user.user_name = input_name;
+        user.password = input_password;
+        string data = JsonUtility.ToJson(user);
+        using(UnityWebRequest www = UnityWebRequest.Put(url + postUserEP,data))
         {
             www.method="POST";
             www.SetRequestHeader("Content-Type", "Application/json");
@@ -94,26 +87,36 @@ public class APITest : MonoBehaviour
 
             if (www.result == UnityWebRequest.Result.Success) 
             {
-                msg= new Message();
-                msg= JsonUtility.FromJson<Message>(www.downloadHandler.text);
-                if (msg.message=="User Created Succesfully!")
+                newMessage = new Message();
+                newMessage = JsonUtility.FromJson<Message>(www.downloadHandler.text);
+                if (newMessage.message == "User Created Succesfully!")
                 {
-                    yield return new WaitForSeconds(1.5f);
-                    SceneManager.LoadScene(3);;
+                    PlayerPrefs.SetString("user_name", user.user_name);
+                    yield return new WaitForSeconds(2f);
+                    SceneManager.LoadScene(3);
                 }
+                else
+                {
+                    countryErrorMessage.GetComponent<TMP_Text>().text = "Error creating user.";
+                    countryErrorMessage.SetActive(true);
+                }
+            }
+            else
+            {
+                countryErrorMessage.GetComponent<TMP_Text>().text = "Error: " + www.error;
+                countryErrorMessage.SetActive(true);
             }
         }
     }
 
-    IEnumerator Verify_User(string input_name, string input_password)
-    {   
+    IEnumerator VerifyUser(string input_name, string input_password)
+    {
         User_data user = new User_data();
         user.user_name = input_name;
         user.password = input_password;
         string data = JsonUtility.ToJson(user);
         using(UnityWebRequest www = UnityWebRequest.Put(url + checkUsersEP, data))
         {
-        //using
             www.method="POST";
             www.SetRequestHeader("Content-Type", "Application/json");
             yield return www.SendWebRequest();
@@ -123,12 +126,12 @@ public class APITest : MonoBehaviour
                 if(www.downloadHandler.text == "1")
                 {
                     PlayerPrefs.SetString("user_name", user.user_name);
-                    PlayerPrefs.SetString("user_password", user.password);
-                    yield return new WaitForSeconds(.8f);
+                    yield return new WaitForSeconds(1f);
                     SceneManager.LoadScene(2);
                 }
                 else
                 {
+                    userErrorMessage.GetComponent<TMP_Text>().text = "Error verifying user.";
                     userErrorMessage.SetActive(true);
                 }
             } 
@@ -157,8 +160,8 @@ public class APITest : MonoBehaviour
                 {
                     PlayerPrefs.SetString("user_name", user.user_name);
                     PlayerPrefs.SetString("user_password", user.password);
-                    yield return new WaitForSeconds(.8f);
-                    SceneManager.LoadScene(2);
+                    yield return new WaitForSeconds(2f);
+                    SceneManager.LoadScene(2); // Load country selection screen
                 }
                 else
                 {
@@ -176,20 +179,22 @@ public class APITest : MonoBehaviour
     IEnumerator AddAttempt(string level_attempted, int obtained_score, double obtained_accuracy, int elapsed_time, int obtained_result)
     {
         Attempts newAttempt = new Attempts();
-        newAttempt.user_id = GetUserId(PlayerPrefs.GetString("user_name"));
+        //newAttempt.user_id = GetUserId(PlayerPrefs.GetString("user_name"));
         newAttempt.level_att = level_attempted;
         newAttempt.score = obtained_score;
         newAttempt.accuracy = obtained_accuracy;
         newAttempt.time_elapsed = elapsed_time;
         newAttempt.result = obtained_result;
+
         Debug.Log("ATTEMPT: " + newAttempt);
 
         string jsonData = JsonUtility.ToJson(newAttempt);
-        //Debug.Log("BODY: " + jsonData);
+        
+        Debug.Log("BODY: " + jsonData);
 
         // Send using the Put method:
         // https://stackoverflow.com/questions/68156230/unitywebrequest-post-not-sending-body
-        UnityWebRequest www = UnityWebRequest.Put(url + putAttemptsEP, jsonData);
+        UnityWebRequest www = UnityWebRequest.Put(url + postAttemptEP, jsonData);
         // Set the method later, and indicate the encoding is JSON
         www.method = "POST";
         www.SetRequestHeader("Content-Type", "application/json");

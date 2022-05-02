@@ -499,11 +499,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   input_name: 
   input_password: 
+  input_country: 
   nameInputField: {fileID: 1580716864}
   passwordInputField: {fileID: 765150476}
   apiTest: {fileID: 1972054807}
   userErrorMessage: {fileID: 1296852646}
   countryErrorMessage: {fileID: 0}
+  countrySelected: 0
 --- !u!1 &703811671
 GameObject:
   m_ObjectHideFlags: 0
@@ -1642,7 +1644,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Error. Check your username or password.
+  m_text: 'Error: check your username or password.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b417f114fa05f47439f0c3d81c1ac3f5, type: 2}
   m_sharedMaterial: {fileID: 4319113555635395920, guid: b417f114fa05f47439f0c3d81c1ac3f5, type: 2}
@@ -1806,18 +1808,6 @@ MonoBehaviour:
       - m_Target: {fileID: 492540291}
         m_TargetAssemblyTypeName: UserDataUI, Assembly-CSharp
         m_MethodName: SubmitUserData
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1687351293}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: LoadCountrySelect
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2716,9 +2706,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   url: localhost:3000
-  getUsersEP: /api/user_data
-  putUsersEP: /api/user_data
-  putAttemptsEP: /api/attempts
+  checkUsersEP: /api/user_data/verify
+  postUserEP: /api/user_data/post
+  postAttemptEP: /api/attempts/post
+  getUserIdEP: /api/user_data/get_id
+  user:
+    user_name: 
+    password: 
+    country: 
+  userErrorMessage: {fileID: 1296852646}
+  countryErrorMessage: {fileID: 0}
 --- !u!224 &1972054809
 RectTransform:
   m_ObjectHideFlags: 0

@@ -990,9 +990,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   url: localhost:3000
-  getUsersEP: /api/user_data
-  putUsersEP: /api/user_data
-  putAttemptsEP: /api/attempts
+  checkUsersEP: /api/user_data/verify
+  postUserEP: /api/user_data/post
+  postAttemptEP: /api/attempts/post
+  getUserIdEP: /api/user_data/get_id
+  user:
+    user_name: 
+    password: 
+    country: 
+  userErrorMessage: {fileID: 0}
+  countryErrorMessage: {fileID: 0}
 --- !u!4 &608438656
 Transform:
   m_ObjectHideFlags: 0
@@ -1815,7 +1822,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 45adf96f4d5b143408e91222123e1fa0, type: 3}
+  m_audioClip: {fileID: 8300000, guid: a7eac0925f16c4107bf85e942ff8e35e, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -2801,7 +2808,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 1080007246}
-  gameManager: {fileID: 0}
+  gameManager: {fileID: 408389672}
   columns:
   - {fileID: 434437907}
   - {fileID: 1524820961}

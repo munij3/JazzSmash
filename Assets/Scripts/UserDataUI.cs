@@ -22,6 +22,7 @@ public class UserDataUI : MonoBehaviour
     void Start()
     {
         api = apiTest.GetComponent<APITest>();
+
         var dropdown = transform.GetComponent<Dropdown>();
         
         dropdown.options.Clear();
@@ -73,27 +74,34 @@ public class UserDataUI : MonoBehaviour
         input_country = dropdown.options[index].text;
         countrySelected = true;
     }
+
     bool ReadName()
     {
+        input_name = nameInputField.GetComponent<TMP_Text>().text;
+
         if(input_name.Length < 3 || input_name.Length > 10)
         {
+            Debug.Log(input_name.Length);
+            Debug.Log("false name");
             return false;
         }
         else
         {
-            input_name = nameInputField.GetComponent<TMP_Text>().text;
             return true;
         }
     }
+
     bool ReadPassword()
     {
-        if(input_password.Length < 6 || input_password.Length > 16)
+        input_password = passwordInputField.GetComponent<TMP_Text>().text;
+        
+        if(input_password.Length < 6 || input_password.Length > 12)
         {
+            Debug.Log("false password");
             return false;
         }
         else
         {
-            input_password = passwordInputField.GetComponent<TMP_Text>().text;
             return true;
         }
     }

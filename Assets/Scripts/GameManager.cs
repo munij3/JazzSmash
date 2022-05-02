@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
         trackManager = FindObjectOfType<TrackManager>();
         api = apiTest.GetComponent<APITest>();
     }
+    
     public void SetPause()
     {
         if (pausedGame == false)
@@ -50,24 +51,36 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+
     public void LoadUserInputScene()
     {
         SceneManager.LoadScene(1);
     }
+
     public void LoadCountrySelect()
     {
         SceneManager.LoadScene(2);
     }
+
     public void LoadLevelSelect()
     {
         SceneManager.LoadScene(3);
     }
+
     public void LoadLevel1Scene()
     {
         Time.timeScale = 1f;
         pausedGame = false;
         SceneManager.LoadScene(4);
     }
+
+    public void LoadLevel2Scene()
+    {
+        Time.timeScale = 1f;
+        pausedGame = false;
+        SceneManager.LoadScene(5);
+    }
+
     public void RestartLevel()
     {
         Time.timeScale = 1f;
@@ -75,6 +88,7 @@ public class GameManager : MonoBehaviour
         levelCompleteUI.SetActive(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
     public void FailedLevel()
     {
         Time.timeScale = 0f;
@@ -85,6 +99,7 @@ public class GameManager : MonoBehaviour
         
         api.AddAttemptMethod(trackManager.audioSource.ToString(), scoreManager.score, scoreManager.accuracy, (int)trackManager.currentSongTime, scoreManager.totalHitCount);
     }
+
     public void CompleteLevel()
     {
         pausedGame = true;
@@ -94,6 +109,7 @@ public class GameManager : MonoBehaviour
        
         api.AddAttemptMethod(trackManager.audioSource.ToString(), scoreManager.score, scoreManager.accuracy, (int)trackManager.currentSongTime, scoreManager.totalHitCount);
     }
+
     void Update() 
     {
         if (Input.GetKeyDown(KeyCode.Escape))

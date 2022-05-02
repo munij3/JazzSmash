@@ -948,9 +948,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   url: localhost:3000
-  getUsersEP: 
-  putUsersEP: /api/user_data
-  putAttemptsEP: /api/attempts
+  checkUsersEP: /api/user_data/verify
+  postUserEP: /api/user_data/post
+  postAttemptEP: /api/attempts/post
+  getUserIdEP: /api/user_data/get_id
+  user:
+    user_name: 
+    password: 
+    country: 
+  userErrorMessage: {fileID: 0}
+  countryErrorMessage: {fileID: 0}
 --- !u!4 &1912850876
 Transform:
   m_ObjectHideFlags: 0
