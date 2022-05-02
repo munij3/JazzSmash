@@ -24,7 +24,7 @@ public class User_data
 [System.Serializable]
 public class Attempts
 {
-    public int user_id;
+    public int user_name;
     public string level_att;
     public int score;
     public double accuracy;
@@ -43,6 +43,7 @@ public class APITest : MonoBehaviour
 {
     [SerializeField] string url;
     // API routes
+    [SerializeField] string getUsersEP;
     [SerializeField] string putUsersEP;
     [SerializeField] string putAttemptsEP;
 
@@ -82,7 +83,6 @@ public class APITest : MonoBehaviour
     {
         // Create the object to be sent as json
         User_data newUser = new User_data();
-        newUser.user_id = GetUsers(user_name);
         newUser.user_name = input_name;
         newUser.country = input_country;
         Debug.Log("USER: " + newUser);
