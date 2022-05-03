@@ -733,8 +733,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Jazz Smash
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b417f114fa05f47439f0c3d81c1ac3f5, type: 2}
-  m_sharedMaterial: {fileID: 4319113555635395920, guid: b417f114fa05f47439f0c3d81c1ac3f5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5ab7b4efc74a21d458226357e3e880b7, type: 2}
+  m_sharedMaterial: {fileID: -2247877249788773716, guid: 5ab7b4efc74a21d458226357e3e880b7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1078,8 +1078,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: SUBMIT
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b417f114fa05f47439f0c3d81c1ac3f5, type: 2}
-  m_sharedMaterial: {fileID: 4319113555635395920, guid: b417f114fa05f47439f0c3d81c1ac3f5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5ab7b4efc74a21d458226357e3e880b7, type: 2}
+  m_sharedMaterial: {fileID: -2247877249788773716, guid: 5ab7b4efc74a21d458226357e3e880b7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1532,7 +1532,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: eb44141a37b52534c9ffbd42c17b6372, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 0
@@ -1739,7 +1739,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: eb44141a37b52534c9ffbd42c17b6372, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 0

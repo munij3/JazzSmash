@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 159a0c19b3bee854d8f412bcf41617f3
+guid: eb44141a37b52534c9ffbd42c17b6372
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Balsamiq Sans
+  - Newsgeek
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
