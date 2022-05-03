@@ -16,14 +16,14 @@ public class UserDataUI : MonoBehaviour
     public GameObject apiTest;
     public GameObject userErrorMessage;
     public GameObject countryErrorMessage;
+    static Dropdown dropdown;
     APITest api;
-    public bool countrySelected = false;
 
     void Start()
     {
         api = apiTest.GetComponent<APITest>();
 
-        var dropdown = transform.GetComponent<Dropdown>();
+        dropdown = transform.GetComponent<Dropdown>();
         
         dropdown.options.Clear();
 
@@ -58,7 +58,7 @@ public class UserDataUI : MonoBehaviour
         // Fill dropdown list with countries
         foreach(var country in countries)
         {
-            dropdown.options.Add(new Dropdown.OptionData() { text = country});
+            dropdown.options.Add(new Dropdown.OptionData() { text = country });
         }
 
         DropdownItemSelected(dropdown);
@@ -68,11 +68,12 @@ public class UserDataUI : MonoBehaviour
             DropdownItemSelected(dropdown);
         });
     }
-    void DropdownItemSelected(Dropdown dropdown)
+
+    bool DropdownItemSelected(Dropdown dropdown)
     {
         int index = dropdown.value;
         input_country = dropdown.options[index].text;
-        countrySelected = true;
+        return true;
     }
 
     bool ReadName()
@@ -105,6 +106,7 @@ public class UserDataUI : MonoBehaviour
             return true;
         }
     }
+
     public void SubmitUserData()
     {
         if(ReadName() && ReadPassword())
@@ -116,9 +118,12 @@ public class UserDataUI : MonoBehaviour
             userErrorMessage.SetActive(true);
         }
     }
+
     public void SubmitCountry()
     {
-        if(countrySelected)
+        Debug.Log(input_country);
+
+        if(DropdownItemSelected(dropdown))
         {
             api.AddUserMethod(input_name, input_password, input_country);
         }

@@ -19,9 +19,9 @@ using TMPro;
 [System.Serializable]
 public class User_data
 {
-    // public int user_id;
     public string user_name;
     public string password;
+    public int user_id;
     public string country;
 }
 [System.Serializable]
@@ -123,16 +123,19 @@ public class APITest : MonoBehaviour
 
             if (www.result == UnityWebRequest.Result.Success) 
             {
+                // If the user exists
                 if(www.downloadHandler.text == "1")
                 {
                     PlayerPrefs.SetString("user_name", user.user_name);
                     yield return new WaitForSeconds(1f);
-                    SceneManager.LoadScene(2);
+                    SceneManager.LoadScene(3);
                 }
+                // If the user does not exist
                 else
                 {
-                    userErrorMessage.GetComponent<TMP_Text>().text = "Error verifying user.";
-                    userErrorMessage.SetActive(true);
+                    PlayerPrefs.SetString("user_name", user.user_name);
+                    yield return new WaitForSeconds(1f);
+                    SceneManager.LoadScene(2);
                 }
             } 
             else 
@@ -149,24 +152,13 @@ public class APITest : MonoBehaviour
         string data = JsonUtility.ToJson(user);
         using(UnityWebRequest www = UnityWebRequest.Put(url + getUserIdEP, data))
         {
-        //using
             www.method="POST";
             www.SetRequestHeader("Content-Type", "Application/json");
             yield return www.SendWebRequest();
 
             if (www.result == UnityWebRequest.Result.Success) 
             {
-                if(www.downloadHandler.text == "1")
-                {
-                    PlayerPrefs.SetString("user_name", user.user_name);
-                    PlayerPrefs.SetString("user_password", user.password);
-                    yield return new WaitForSeconds(2f);
-                    SceneManager.LoadScene(2); // Load country selection screen
-                }
-                else
-                {
-                    userErrorMessage.SetActive(true);
-                }
+                user.user_id = int.Parse(www.downloadHandler.text)
             } 
             else 
             {
