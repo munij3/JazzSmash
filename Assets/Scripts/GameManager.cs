@@ -11,8 +11,8 @@ public class GameManager : MonoBehaviour
     public GameObject mainMenuUI;
     public GameObject PauseMenuUI;
     public Columns[] columns;
-    static ScoreManager scoreManager;
-    static TrackManager trackManager;
+    ScoreManager scoreManager;
+    TrackManager trackManager;
     public GameObject apiTest;
     APITest api;
     static bool levelStatus = false;
@@ -26,8 +26,6 @@ public class GameManager : MonoBehaviour
         scoreManager = FindObjectOfType<ScoreManager>();
         trackManager = FindObjectOfType<TrackManager>();
         api = apiTest.GetComponent<APITest>();
-        
-        api.AddMusicDataMethod(trackManager.audioSource.ToString(), trackManager.audioSourceDuration, trackManager.noteCount);
     }
     
     public void SetPause()

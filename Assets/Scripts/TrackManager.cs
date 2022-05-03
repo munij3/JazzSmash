@@ -1,5 +1,7 @@
 using Unity;
 using UnityEngine;
+using UnityEngine.Audio;
+using System;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 
@@ -7,8 +9,10 @@ public class TrackManager : MonoBehaviour
 {
     public static TrackManager trackManager; // track manager instance for public access
     public static MidiFile midiFile; // Location on memory where the midi file will load
-    public AudioSource audioSource; // Selected level track
+    public AudioSource audioSource; // Selected level track object
     public GameManager gameManager;
+    public GameObject apiTest;
+    APITest api;
     public Columns[] columns; // Columns for each set of recorded midi keys
     public string midiName; // Streams midi file from the MidiFiles folder 
     public int inputDelay; // delay in milioseconds for keyboard inputs
@@ -33,23 +37,27 @@ public class TrackManager : MonoBehaviour
     {
         trackManager = this;
 
+        audioSourceDuration = audioSource.clip.length;
+
         gameManager = FindObjectOfType<GameManager>();
 
-        midiFile = MidiFile.Read(Application.streamingAssetsPath  + "/" + midiName);
+        api = apiTest.GetComponent<APITest>();
 
-        audioSourceDuration = audioSource.clip.length;
+        midiFile = MidiFile.Read(Application.streamingAssetsPath  + "/" + midiName);
 
         /* Obtain notes and a count of notes from the midi file, then copy them to an array and set timestamps for each column */
         var notes = midiFile.GetNotes();
         var array = new Melanchall.DryWetMidi.Interaction.Note[notes.Count];
         notes.CopyTo(array, 0);
 
-        Debug.Log("Audio clip length : " + audioSource.clip.length);
-
         foreach (var column in columns) column.SetTimeStamps(array); // Set time stams for each column
         foreach (var column in columns) noteCount += column.timeStamps.Count;
-
+        
+        Debug.Log("Audio clip name : " + audioSource.clip.ToString());
+        Debug.Log("Audio clip length : " + audioSource.clip.length);
         Debug.Log($"Amount of notes: {noteCount}");
+
+        api.AddMusicDataMethod(audioSource.clip.ToString(), (decimal)Math.Round((double)audioSourceDuration, 2), noteCount);
 
         Invoke(nameof(StartSong), songDelayInSeconds); // Invoke StartSong or audio source after a delay
     }

@@ -40,7 +40,7 @@ public class Attempts
 public class Music_data
 {
     public string song_name;
-    public float duration;
+    public decimal duration;
     public int note_ammount;
 }
 
@@ -56,9 +56,6 @@ public class APITest : MonoBehaviour
     public User_data user; 
     public GameObject userErrorMessage;
     public GameObject countryErrorMessage;
-    
-    // Update is called once per frame
-    void Update(){}
 
     public void AddUserMethod(string input_name, string input_password, string input_country)
     {
@@ -80,7 +77,7 @@ public class APITest : MonoBehaviour
         StartCoroutine(GetId(user_n));
     }
 
-    public void AddMusicDataMethod(string song_name, float duration, int note_ammount)
+    public void AddMusicDataMethod(string song_name, decimal duration, int note_ammount)
     {
         StartCoroutine(AddMusicData(song_name, duration, note_ammount));
     }
@@ -99,6 +96,7 @@ public class APITest : MonoBehaviour
         string data = JsonUtility.ToJson(user);
         using(UnityWebRequest www = UnityWebRequest.Put(url + postUserEP,data))
         {
+            // Set the method later, and indicate the encoding is JSON
             www.method="POST";
             www.SetRequestHeader("Content-Type", "Application/json");
             yield return www.SendWebRequest();
@@ -135,6 +133,7 @@ public class APITest : MonoBehaviour
         string data = JsonUtility.ToJson(user);
         using(UnityWebRequest www = UnityWebRequest.Put(url + checkUsersEP, data))
         {
+            // Set the method later, and indicate the encoding is JSON
             www.method="POST";
             www.SetRequestHeader("Content-Type", "Application/json");
             yield return www.SendWebRequest();
@@ -170,6 +169,7 @@ public class APITest : MonoBehaviour
         string data = JsonUtility.ToJson(user);
         using(UnityWebRequest www = UnityWebRequest.Put(url + getUserIdEP, data))
         {
+            // Set the method later, and indicate the encoding is JSON
             www.method="POST";
             www.SetRequestHeader("Content-Type", "Application/json");
             yield return www.SendWebRequest();
@@ -222,7 +222,7 @@ public class APITest : MonoBehaviour
         }
     }
 
-    IEnumerator AddMusicData(string name, float dur, int ammount)
+    IEnumerator AddMusicData(string name, decimal dur, int ammount)
     {
         Music_data newData = new Music_data();
         newData.song_name = name;
