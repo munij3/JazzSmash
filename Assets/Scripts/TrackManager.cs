@@ -1,3 +1,4 @@
+using Unity;
 using UnityEngine;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
@@ -16,6 +17,7 @@ public class TrackManager : MonoBehaviour
     public float songDelayInSeconds; // Song start delay
     public float currentSongTime; // Current audio source time when calling the SourceTime function
     public float audioSourceDuration; // Duration of the provided audio source
+    public int noteCount;
     public float noteTimeOnScreen; // Note duration on screen in seconds
     public float noteSpawnPos; // Note spawn Y position
     public float noteAttackPos; // Note attack Y position
@@ -29,6 +31,7 @@ public class TrackManager : MonoBehaviour
 
     void Start()
     {
+        Debug.Log((double)trackManager.audioSource.timeSamples);
         trackManager = this;
 
         gameManager = FindObjectOfType<GameManager>();
@@ -45,6 +48,9 @@ public class TrackManager : MonoBehaviour
         // Debug.Log("Audio clip length : " + audioSource.clip.length);
 
         foreach (var column in columns) column.SetTimeStamps(array); // Set time stams for each column
+        foreach (var column in columns) noteCount += column.timeStamps.Count;
+
+        Debug.Log($"Amount of notes: {noteCount}");
 
         Invoke(nameof(StartSong), songDelayInSeconds); // Invoke StartSong or audio source after a delay
     }

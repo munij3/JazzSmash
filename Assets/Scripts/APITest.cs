@@ -35,12 +35,22 @@ public class Attempts
     public int result;
 }
 
+[System.Serializable]
+
+public class Music_data
+{
+    public string song_name;
+    public float duration;
+    public int note_ammount;
+}
+
 public class APITest : MonoBehaviour
 {
     [SerializeField] string url;
     // API routes
     [SerializeField] string checkUsersEP;
     [SerializeField] string postUserEP;
+    [SerializeField] string postMusicDataEP;
     [SerializeField] string postAttemptEP;
     [SerializeField] string getUserIdEP;
     public User_data user; 
@@ -54,6 +64,7 @@ public class APITest : MonoBehaviour
     {
         StartCoroutine(AddUser(input_name, input_password, input_country));
     }
+
     public void VerifyUserMethod(string input_name, string input_password)
     {
         StartCoroutine(VerifyUser(input_name, input_password));
@@ -63,10 +74,17 @@ public class APITest : MonoBehaviour
     {
         StartCoroutine(AddAttempt(level_attempted, obtained_score, obtained_accuracy, elapsed_time, obtained_result));
     }
-    // public int GetUserId(string user_name)
-    // {
-    //     StartCoroutine(GetId(user_name));
-    // }
+
+    public void GetUserId(string user_n)
+    {
+        StartCoroutine(GetId(user_n));
+    }
+
+    public void AddMusicDataMethod(string song_name, float duration, int note_ammount)
+    {
+        StartCoroutine(AddMusicData(song_name, duration, note_ammount));
+    }
+
     public class Message
     {
         public string message;
@@ -74,7 +92,7 @@ public class APITest : MonoBehaviour
     Message newMessage;
 
     IEnumerator AddUser(string input_name, string input_password, string input_country)
-    {   
+    {
         User_data user = new User_data();
         user.user_name = input_name;
         user.password = input_password;
@@ -128,14 +146,14 @@ public class APITest : MonoBehaviour
                 {
                     PlayerPrefs.SetString("user_name", user.user_name);
                     yield return new WaitForSeconds(1f);
-                    SceneManager.LoadScene(3);
+                    SceneManager.LoadScene(3); // Send to level selection
                 }
                 // If the user does not exist
                 else
                 {
                     PlayerPrefs.SetString("user_name", user.user_name);
                     yield return new WaitForSeconds(1f);
-                    SceneManager.LoadScene(2);
+                    SceneManager.LoadScene(2); // Send to country selection, which will add the user after submitting country
                 }
             } 
             else 
@@ -145,10 +163,10 @@ public class APITest : MonoBehaviour
             }
         }
     }
-    IEnumerator GetId(string user_name)
+    IEnumerator GetId(string user_n)
     {
         User_data user = new User_data();
-        user.user_name = user_name;
+        user.user_name = user_n;
         string data = JsonUtility.ToJson(user);
         using(UnityWebRequest www = UnityWebRequest.Put(url + getUserIdEP, data))
         {
@@ -158,7 +176,8 @@ public class APITest : MonoBehaviour
 
             if (www.result == UnityWebRequest.Result.Success) 
             {
-                user.user_id = int.Parse(www.downloadHandler.text)
+                user.user_id = int.Parse(www.downloadHandler.text);
+                PlayerPrefs.SetInt("user_id", user.user_id);
             } 
             else 
             {
@@ -171,7 +190,8 @@ public class APITest : MonoBehaviour
     IEnumerator AddAttempt(string level_attempted, int obtained_score, double obtained_accuracy, int elapsed_time, int obtained_result)
     {
         Attempts newAttempt = new Attempts();
-        //newAttempt.user_id = GetUserId(PlayerPrefs.GetString("user_name"));
+        GetUserId(PlayerPrefs.GetString("user_name"));
+        newAttempt.user_id = PlayerPrefs.GetInt("user_id");
         newAttempt.level_att = level_attempted;
         newAttempt.score = obtained_score;
         newAttempt.accuracy = obtained_accuracy;
@@ -187,6 +207,37 @@ public class APITest : MonoBehaviour
         // Send using the Put method:
         // https://stackoverflow.com/questions/68156230/unitywebrequest-post-not-sending-body
         UnityWebRequest www = UnityWebRequest.Put(url + postAttemptEP, jsonData);
+        // Set the method later, and indicate the encoding is JSON
+        www.method = "POST";
+        www.SetRequestHeader("Content-Type", "application/json");
+        yield return www.SendWebRequest();
+
+        if (www.result == UnityWebRequest.Result.Success) 
+        {
+            Debug.Log("Response: " + www.downloadHandler.text);
+        } 
+        else 
+        {
+            Debug.Log("Error: " + www.error);
+        }
+    }
+
+    IEnumerator AddMusicData(string name, float dur, int ammount)
+    {
+        Music_data newData = new Music_data();
+        newData.song_name = name;
+        newData.duration = dur;
+        newData.note_ammount = ammount;
+
+        Debug.Log("ATTEMPT: " + newData);
+
+        string jsonData = JsonUtility.ToJson(newData);
+        
+        Debug.Log("BODY: " + jsonData);
+
+        // Send using the Put method:
+        // https://stackoverflow.com/questions/68156230/unitywebrequest-post-not-sending-body
+        UnityWebRequest www = UnityWebRequest.Put(url + postMusicDataEP, jsonData);
         // Set the method later, and indicate the encoding is JSON
         www.method = "POST";
         www.SetRequestHeader("Content-Type", "application/json");

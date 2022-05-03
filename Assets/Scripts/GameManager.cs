@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadUserInputScene()
     {
+        api.AddMusicDataMethod(trackManager.audioSource.ToString(), trackManager.audioSourceDuration, trackManager.noteCount);
         SceneManager.LoadScene(1);
     }
 
