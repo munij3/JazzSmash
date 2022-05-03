@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
         scoreManager = FindObjectOfType<ScoreManager>();
         trackManager = FindObjectOfType<TrackManager>();
         api = apiTest.GetComponent<APITest>();
+        
+        api.AddMusicDataMethod(trackManager.audioSource.ToString(), trackManager.audioSourceDuration, trackManager.noteCount);
     }
     
     public void SetPause()
@@ -54,7 +56,6 @@ public class GameManager : MonoBehaviour
 
     public void LoadUserInputScene()
     {
-        api.AddMusicDataMethod(trackManager.audioSource.ToString(), trackManager.audioSourceDuration, trackManager.noteCount);
         SceneManager.LoadScene(1);
     }
 

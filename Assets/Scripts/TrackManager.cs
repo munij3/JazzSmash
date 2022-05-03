@@ -31,7 +31,6 @@ public class TrackManager : MonoBehaviour
 
     void Start()
     {
-        Debug.Log((double)trackManager.audioSource.timeSamples);
         trackManager = this;
 
         gameManager = FindObjectOfType<GameManager>();
@@ -45,7 +44,7 @@ public class TrackManager : MonoBehaviour
         var array = new Melanchall.DryWetMidi.Interaction.Note[notes.Count];
         notes.CopyTo(array, 0);
 
-        // Debug.Log("Audio clip length : " + audioSource.clip.length);
+        Debug.Log("Audio clip length : " + audioSource.clip.length);
 
         foreach (var column in columns) column.SetTimeStamps(array); // Set time stams for each column
         foreach (var column in columns) noteCount += column.timeStamps.Count;
