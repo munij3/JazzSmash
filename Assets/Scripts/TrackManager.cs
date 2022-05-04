@@ -54,10 +54,10 @@ public class TrackManager : MonoBehaviour
         foreach (var column in columns) noteCount += column.timeStamps.Count;
         
         Debug.Log("Audio clip name : " + audioSource.clip.ToString());
-        Debug.Log("Audio clip length : " + audioSource.clip.length);
+        Debug.Log("Audio clip length : " + (int)Math.Floor(audioSource.clip.length));
         Debug.Log($"Amount of notes: {noteCount}");
 
-        api.AddMusicDataMethod(audioSource.clip.ToString(), (decimal)Math.Round((double)audioSourceDuration, 2), noteCount);
+        api.AddMusicDataMethod(audioSource.clip.ToString(), (int)Math.Floor(audioSourceDuration), noteCount);
 
         Invoke(nameof(StartSong), songDelayInSeconds); // Invoke StartSong or audio source after a delay
     }

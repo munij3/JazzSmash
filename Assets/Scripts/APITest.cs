@@ -40,7 +40,7 @@ public class Attempts
 public class Music_data
 {
     public string song_name;
-    public decimal duration;
+    public int duration;
     public int note_ammount;
 }
 
@@ -77,7 +77,7 @@ public class APITest : MonoBehaviour
         StartCoroutine(GetId(user_n));
     }
 
-    public void AddMusicDataMethod(string song_name, decimal duration, int note_ammount)
+    public void AddMusicDataMethod(string song_name, int duration, int note_ammount)
     {
         StartCoroutine(AddMusicData(song_name, duration, note_ammount));
     }
@@ -222,7 +222,7 @@ public class APITest : MonoBehaviour
         }
     }
 
-    IEnumerator AddMusicData(string name, decimal dur, int ammount)
+    IEnumerator AddMusicData(string name, int dur, int ammount)
     {
         Music_data newData = new Music_data();
         newData.song_name = name;
