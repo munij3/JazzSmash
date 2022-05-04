@@ -675,7 +675,7 @@ MonoBehaviour:
   levelCompleteUI: {fileID: 1768868806}
   levelSelectMenu: {fileID: 0}
   mainMenuUI: {fileID: 0}
-  PauseMenuUI: {fileID: 0}
+  PauseMenuUI: {fileID: 2103937892}
   columns: []
   apiTest: {fileID: 608438654}
   pausedGame: 0
@@ -852,7 +852,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1022766027}
-  trackManager: {fileID: 0}
+  trackManager: {fileID: 1726633545}
   gameManager: {fileID: 408389672}
   noteRestriction: 4
   input: 97
@@ -1421,13 +1421,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56525211fb3a74de7b6017d1e6e47dc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreText: {fileID: 0}
-  comboText: {fileID: 0}
-  healthText: {fileID: 0}
-  accuracyText: {fileID: 0}
-  finalScoreText: {fileID: 0}
-  notesHitText: {fileID: 0}
-  statusText: {fileID: 0}
+  scoreText: {fileID: 1715772619}
+  comboText: {fileID: 2078018754}
+  healthText: {fileID: 1281516106}
+  accuracyText: {fileID: 641756480}
+  finalScoreText: {fileID: 1652207228}
+  notesHitText: {fileID: 380542492}
+  statusText: {fileID: 198367978}
   accuracy: 0
   totalHitCount: 0
   totalMissCount: 0
@@ -1743,7 +1743,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1022766027}
-  trackManager: {fileID: 0}
+  trackManager: {fileID: 1726633545}
   gameManager: {fileID: 408389672}
   noteRestriction: 7
   input: 100
@@ -2067,7 +2067,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1022766027}
-  trackManager: {fileID: 0}
+  trackManager: {fileID: 1726633545}
   gameManager: {fileID: 408389672}
   noteRestriction: 2
   input: 108
@@ -2121,7 +2121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1022766027}
-  trackManager: {fileID: 0}
+  trackManager: {fileID: 1726633545}
   gameManager: {fileID: 408389672}
   noteRestriction: 5
   input: 115
@@ -2597,7 +2597,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 1080007246}
   gameManager: {fileID: 408389672}
-  apiTest: {fileID: 0}
+  apiTest: {fileID: 608438654}
   columns:
   - {fileID: 434437907}
   - {fileID: 1524820961}
@@ -2744,7 +2744,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1022766027}
-  trackManager: {fileID: 0}
+  trackManager: {fileID: 1726633545}
   gameManager: {fileID: 408389672}
   noteRestriction: 0
   input: 107
@@ -2798,7 +2798,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1022766027}
-  trackManager: {fileID: 0}
+  trackManager: {fileID: 1726633545}
   gameManager: {fileID: 408389672}
   noteRestriction: 11
   input: 106
@@ -2852,7 +2852,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 1022766027}
-  trackManager: {fileID: 0}
+  trackManager: {fileID: 1726633545}
   gameManager: {fileID: 408389672}
   noteRestriction: 9
   input: 32
