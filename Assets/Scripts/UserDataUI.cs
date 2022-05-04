@@ -125,7 +125,7 @@ public class UserDataUI : MonoBehaviour
 
         if(DropdownItemSelected(dropdown))
         {
-            api.AddUserMethod(input_name, input_password, input_country);
+            api.AddUserMethod(PlayerPrefs.GetString("user_name"), PlayerPrefs.GetString("password"), input_country);
         }
         else
         {

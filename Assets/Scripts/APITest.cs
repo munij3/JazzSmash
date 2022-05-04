@@ -36,6 +36,13 @@ public class Attempts
 }
 
 [System.Serializable]
+public class Level_data
+{
+    public string level_name;
+    public int user_id;
+}
+
+[System.Serializable]
 
 public class Music_data
 {
@@ -52,6 +59,7 @@ public class APITest : MonoBehaviour
     [SerializeField] string postUserEP;
     [SerializeField] string postMusicDataEP;
     [SerializeField] string postAttemptEP;
+    [SerializeField] string postLvlDataEP;
     [SerializeField] string getUserIdEP;
     public User_data user; 
     public GameObject userErrorMessage;
@@ -60,6 +68,7 @@ public class APITest : MonoBehaviour
     public void AddUserMethod(string input_name, string input_password, string input_country)
     {
         StartCoroutine(AddUser(input_name, input_password, input_country));
+        StartCoroutine(GetId(input_name));
     }
 
     public void VerifyUserMethod(string input_name, string input_password)
@@ -79,6 +88,7 @@ public class APITest : MonoBehaviour
 
     public void AddMusicDataMethod(string song_name, int duration, int note_amount)
     {
+        StartCoroutine(AddLevelData(song_name));
         StartCoroutine(AddMusicData(song_name, duration, note_amount));
     }
 
@@ -88,12 +98,59 @@ public class APITest : MonoBehaviour
     }
     Message newMessage;
 
+   IEnumerator AddLevelData(string song_name)
+    {
+
+        Level_data lvlData = new Level_data();
+        lvlData.level_name = song_name;
+        lvlData.user_id = PlayerPrefs.GetInt("user_id");
+        string data = JsonUtility.ToJson(lvlData);
+        
+        Debug.Log(data);
+
+        using(UnityWebRequest www = UnityWebRequest.Put(url + postLvlDataEP,data))
+        {
+            // Set the method later, and indicate the encoding is JSON
+            www.method="POST";
+            www.SetRequestHeader("Content-Type", "Application/json");
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.Success) 
+            {
+                newMessage = new Message();
+                newMessage = JsonUtility.FromJson<Message>(www.downloadHandler.text);
+                if (newMessage.message == "Data inserted correctly.")
+                {
+                    yield return new WaitForSeconds(1f);
+                }
+                else
+                {
+                    countryErrorMessage.GetComponent<TMP_Text>().text = "Error creating user.";
+                    countryErrorMessage.SetActive(true);
+                }
+            }
+            else
+            {
+                countryErrorMessage.GetComponent<TMP_Text>().text = "Error: " + www.error;
+                countryErrorMessage.SetActive(true);
+            }
+        }
+    }
+
     IEnumerator AddUser(string input_name, string input_password, string input_country)
     {
+        Debug.Log(input_name);
+        Debug.Log(input_password);
+        Debug.Log(input_country);
+
         User_data user = new User_data();
         user.user_name = input_name;
         user.password = input_password;
+        user.country = input_country;
         string data = JsonUtility.ToJson(user);
+        
+        Debug.Log(data);
+
         using(UnityWebRequest www = UnityWebRequest.Put(url + postUserEP,data))
         {
             // Set the method later, and indicate the encoding is JSON
@@ -105,10 +162,12 @@ public class APITest : MonoBehaviour
             {
                 newMessage = new Message();
                 newMessage = JsonUtility.FromJson<Message>(www.downloadHandler.text);
-                if (newMessage.message == "User Created Succesfully!")
+                if (newMessage.message == "Data inserted correctly.")
                 {
-                    PlayerPrefs.SetString("user_name", user.user_name);
-                    yield return new WaitForSeconds(2f);
+                    PlayerPrefs.SetString("user_name", input_name);
+                    PlayerPrefs.SetString("password",  input_password);
+                    PlayerPrefs.SetString("country", input_country);
+                    yield return new WaitForSeconds(1f);
                     SceneManager.LoadScene(3);
                 }
                 else
@@ -127,6 +186,9 @@ public class APITest : MonoBehaviour
 
     IEnumerator VerifyUser(string input_name, string input_password)
     {
+        Debug.Log(input_name);
+        Debug.Log(input_password);
+
         User_data user = new User_data();
         user.user_name = input_name;
         user.password = input_password;
@@ -143,14 +205,16 @@ public class APITest : MonoBehaviour
                 // If the user exists
                 if(www.downloadHandler.text == "1")
                 {
-                    PlayerPrefs.SetString("user_name", user.user_name);
+                    PlayerPrefs.SetString("user_name", input_name);
+                    PlayerPrefs.SetString("password",  input_password);
                     yield return new WaitForSeconds(1f);
                     SceneManager.LoadScene(3); // Send to level selection
                 }
                 // If the user does not exist
                 else
                 {
-                    PlayerPrefs.SetString("user_name", user.user_name);
+                    PlayerPrefs.SetString("user_name", input_name);
+                    PlayerPrefs.SetString("password",  input_password);
                     yield return new WaitForSeconds(1f);
                     SceneManager.LoadScene(2); // Send to country selection, which will add the user after submitting country
                 }
@@ -176,8 +240,16 @@ public class APITest : MonoBehaviour
 
             if (www.result == UnityWebRequest.Result.Success) 
             {
+                Debug.Log(int.Parse(www.downloadHandler.text));
+
                 user.user_id = int.Parse(www.downloadHandler.text);
+
+                Debug.Log($"Get user id obtained: {user.user_id}");
+
                 PlayerPrefs.SetInt("user_id", user.user_id);
+
+                Debug.Log($"Prefs id after setting int: {PlayerPrefs.GetInt("user_id")}");
+                
             } 
             else 
             {
@@ -190,8 +262,14 @@ public class APITest : MonoBehaviour
     IEnumerator AddAttempt(string level_attempted, int obtained_score, double obtained_accuracy, int elapsed_time, int obtained_result)
     {
         Attempts newAttempt = new Attempts();
-        GetUserId(PlayerPrefs.GetString("user_name"));
+
+        Debug.Log($"Prefs user name: {PlayerPrefs.GetString("user_name")}");
+        Debug.Log($"Prefs user id: {PlayerPrefs.GetString("user_id")}");
+
         newAttempt.user_id = PlayerPrefs.GetInt("user_id");
+
+        Debug.Log($"New attempt user id: {newAttempt.user_id}");
+
         newAttempt.level_att = level_attempted;
         newAttempt.score = obtained_score;
         newAttempt.accuracy = obtained_accuracy;

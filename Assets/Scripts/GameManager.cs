@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour
         trackManager.audioSource.Stop();
         levelCompleteUI.SetActive(true);
         
-        api.AddAttemptMethod(trackManager.audioSource.ToString(), scoreManager.score, scoreManager.accuracy, (int)trackManager.currentSongTime, scoreManager.totalHitCount);
+        api.AddAttemptMethod(trackManager.audioSource.clip.ToString(), scoreManager.score, scoreManager.accuracy, (int)trackManager.currentSongTime, scoreManager.totalHitCount);
     }
 
     public void CompleteLevel()
@@ -107,7 +107,7 @@ public class GameManager : MonoBehaviour
         scoreManager.GetResults(levelStatus);
         levelCompleteUI.SetActive(true);
        
-        api.AddAttemptMethod(trackManager.audioSource.ToString(), scoreManager.score, scoreManager.accuracy, (int)trackManager.currentSongTime, scoreManager.totalHitCount);
+        api.AddAttemptMethod(trackManager.audioSource.clip.ToString(), scoreManager.score, scoreManager.accuracy, (int)trackManager.currentSongTime, scoreManager.totalHitCount);
     }
 
     void Update() 
