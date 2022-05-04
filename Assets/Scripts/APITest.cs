@@ -41,7 +41,7 @@ public class Music_data
 {
     public string song_name;
     public int duration;
-    public int note_ammount;
+    public int note_amount;
 }
 
 public class APITest : MonoBehaviour
@@ -77,9 +77,9 @@ public class APITest : MonoBehaviour
         StartCoroutine(GetId(user_n));
     }
 
-    public void AddMusicDataMethod(string song_name, int duration, int note_ammount)
+    public void AddMusicDataMethod(string song_name, int duration, int note_amount)
     {
-        StartCoroutine(AddMusicData(song_name, duration, note_ammount));
+        StartCoroutine(AddMusicData(song_name, duration, note_amount));
     }
 
     public class Message
@@ -222,12 +222,12 @@ public class APITest : MonoBehaviour
         }
     }
 
-    IEnumerator AddMusicData(string name, int dur, int ammount)
+    IEnumerator AddMusicData(string name, int dur, int amount)
     {
         Music_data newData = new Music_data();
         newData.song_name = name;
         newData.duration = dur;
-        newData.note_ammount = ammount;
+        newData.note_amount = amount;
 
         Debug.Log("ATTEMPT: " + newData);
 
